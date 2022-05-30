@@ -1,0 +1,8 @@
+node_modules
+searcher
+searcher.zip
+.env
+.vs
+package-lock.json
+src/js/*.js
+src/js/*.txt

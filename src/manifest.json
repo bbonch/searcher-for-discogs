@@ -1,0 +1,62 @@
+{
+  "name": "Searcher for Discogs",
+  "version": "VERSION",
+  "icons": {
+    "16": "images/icon16.png",
+    "48": "images/icon48.png",
+    "128": "images/icon.png"
+  },
+  "description": "Allows to listen to tracks on Discogs by clicking on it.",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.discogs.com/*",
+        "https://rateyourmusic.com/*"
+      ],
+      "css": [
+        "css/sfd.css"
+      ],
+      "js": [
+        "js/libs/jquery-3.3.1.min.js",
+        "js/libs/bootstrap.js",
+        "js/libs/yt.js",
+        "js/libs/ga.js",
+        "js/sfd/load-cs.js"
+      ]
+    }
+  ],
+  "short_name": "Searcher for Discogs",
+  "action": {
+    "default_icon": "images/icon48.png",
+    "default_title": "Searcher for Discogs VERSION"
+  },
+  "author": "Dmitry Sergienko",
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "images/*.png",
+        "images/*.jpg",
+        "fonts/*.*",
+        "*.html",
+        "js/sfd.js"
+      ],
+      "matches": [
+        "https://*.discogs.com/*",
+        "https://rateyourmusic.com/*"
+      ]
+    }
+  ],
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://*.spotify.com/*",
+    "https://*.deezer.com/*",
+    "https://www.googleapis.com/"
+  ],
+  "options_page": "html/settings.html",
+  "manifest_version": 3
+}
