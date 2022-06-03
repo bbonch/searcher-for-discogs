@@ -52,11 +52,11 @@ class Settings extends Component {
         };
 
         const thisReact = this;
-        chrome.storage.sync.get('settings', function (settings) {
-            if (settings.settings == undefined || settings.settings == "") {
+        chrome.storage.sync.get('settings', function (value) {
+            if (value.settings == undefined || value.settings == "") {
                 chrome.storage.sync.set({ 'settings': JSON.stringify(thisReact.state) });
             } else {
-                const stateCopy = Object.assign(thisReact.state, JSON.parse(settings.settings));
+                const stateCopy = Object.assign(thisReact.state, JSON.parse(value.settings));
                 thisReact.setState(stateCopy);
             }
         });

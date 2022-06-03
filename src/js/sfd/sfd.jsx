@@ -36,8 +36,10 @@ chrome.storage.sync.get('settings', function (settings) {
     if (settings.settings == undefined || settings.settings == "") {
         chrome.storage.sync.set({ 'settings': JSON.stringify(settingsJSON) });
     } else {
-        const settingsCopy = Object.assign(settingsJSON, JSON.parse(settings.settings));
-        settingsJSON = settingsCopy;
+        Object.assign(settingsJSON, JSON.parse(settings.settings));
+        if (!Number.isInteger(settingsJSON.defaultSearchSource)) {
+            settingsJSON.defaultSearchSource = parseInt(settingsJSON.defaultSearchSource);
+        }
     }
 
     const tracks = document.querySelectorAll("ds-icon");

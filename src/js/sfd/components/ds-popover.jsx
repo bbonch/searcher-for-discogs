@@ -167,9 +167,9 @@ class DSPopover extends Component {
                             <img src={this.getSearchSourceUrl()} />
                         </button>
                         <ul className="dropdown-menu">
-                            <li onClick={() => this.changeSearchSource('youtube')}><img src={this.icons.youTube} /></li>
-                            <li onClick={() => this.changeSearchSource('spotify')}><img src={this.icons.spotify} /></li>
-                            <li onClick={() => this.changeSearchSource('deezer')}><img src={this.icons.deezer} /></li>
+                            <li onClick={() => this.changeSearchSource(constants.searchSources.youTube)}><img src={this.icons.youTube} /></li>
+                            <li onClick={() => this.changeSearchSource(constants.searchSources.spotify)}><img src={this.icons.spotify} /></li>
+                            <li onClick={() => this.changeSearchSource(constants.searchSources.deezer)}><img src={this.icons.deezer} /></li>
                         </ul>
                     </div>
                     <a className="social-item" target="_blank" href={this.settingsPage}><img className="settings-btn" src={this.icons.settings} /></a>
