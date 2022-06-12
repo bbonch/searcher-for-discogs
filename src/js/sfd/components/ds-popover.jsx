@@ -7,6 +7,7 @@ import constants from '../constants'
 import DSYouTube from './ds-youtube.jsx'
 import DSSpotify from './ds-spotify.jsx'
 import DSDeezer from './ds-deezer.jsx'
+import { Popover } from 'bootstrap'
 
 class DSPopover extends Component {
     constructor(props) {
@@ -67,48 +68,39 @@ class DSPopover extends Component {
         $(".popover").css("opacity", this.opacity);
     }
 
-    prevClicked = () => {
-        $(`.${constants.classes.dsIcon}`).popover("destroy");
+    changeTrack = (getTrack) => {
+        const selectedTrack = $(this.localOptions.trackTitle + ".track-selected");
+        const selectedIcon = selectedTrack.parent().find(`.${constants.classes.dsIcon}`);
+        const popover = Popover.getInstance(selectedIcon);
+        if (popover != null) {
+            popover.hide();
+        }
 
-        var selectedTrack = $(this.localOptions.trackTitle + ".track-selected").get(0);
-        var prevTrack = this.getPrevTrack(selectedTrack);
-        if (prevTrack == undefined)
+        const newTrack = getTrack(selectedTrack);
+        if (newTrack == undefined)
             return;
-        var icon = this.getIcon(prevTrack);
+        const newIcon = $(newTrack).parent().find(`.${constants.classes.dsIcon}`);
 
-        this.handleVideo(icon);
-    }
-
-    nextClicked = () => {
-        $(`.${constants.classes.dsIcon}`).popover("destroy");
-
-        var selectedTrack = $(this.localOptions.trackTitle + ".track-selected").get(0);
-        var nextTrack = this.getNextTrack(selectedTrack);
-        if (nextTrack == undefined)
-            return;
-        var icon = this.getIcon(nextTrack);
-
-        this.handleVideo(icon);
+        this.handleTrack(newIcon);
     }
 
     showPopup = (icon, title) => {
-        $(icon).popover({
-            content: "<ds-popover />",
+        const content = document.createElement("div");
+        const popover = new Popover(icon, {
+            content: content,
             placement: "right",
             trigger: "manual",
-            html: "true"
+            html: true
         });
-        $(icon).popover("show");
+        popover.show();
 
         this.settings.title = title;
-        const popoverElement = document.querySelector(".popover-content ds-popover");
-        const popoverRoot = createRoot(popoverElement);
+        const popoverRoot = createRoot(content);
         popoverRoot.render(<DSPopover settings={this.settings} />);
     }
 
-    handleVideo = (icon) => {
+    handleTrack = (icon) => {
         var track = this.localOptions.getTrack(icon);
-        $(`.${constants.classes.dsIcon}`).popover("destroy");
         track.addClass("visited");
         $(this.localOptions.trackTitle).removeClass("track-selected");
         $(this.localOptions.trackTitle).each(function (index, value) {
@@ -124,12 +116,6 @@ class DSPopover extends Component {
         title = encodeURIComponent(title.trim());
 
         this.showPopup(icon, title);
-    }
-
-    getIcon = (track) => {
-        var icon = $(track).parent().find(`.${constants.classes.dsIcon}`);
-
-        return icon;
     }
 
     getNextTrack = (selectedTrack) => {
@@ -163,7 +149,7 @@ class DSPopover extends Component {
             <div className="ds-content">
                 <div className="discogs-searcher">
                     <div className="dropdown social-item">
-                        <button className="social-item" data-toggle="dropdown">
+                        <button className="social-item" data-bs-toggle="dropdown">
                             <img src={this.getSearchSourceUrl()} />
                         </button>
                         <ul className="dropdown-menu">
@@ -173,8 +159,8 @@ class DSPopover extends Component {
                         </ul>
                     </div>
                     <a className="social-item" target="_blank" href={this.settingsPage}><img className="settings-btn" src={this.icons.settings} /></a>
-                    <button onClick={this.prevClicked} className="social-item"><img className="prev-btn" src={this.icons.prev} /></button>
-                    <button onClick={this.nextClicked} className="social-item"><img className="next-btn" src={this.icons.next} /></button>
+                    <button onClick={() => this.changeTrack(this.getPrevTrack)} className="social-item"><img className="prev-btn" src={this.icons.prev} /></button>
+                    <button onClick={() => this.changeTrack(this.getNextTrack)} className="social-item"><img className="next-btn" src={this.icons.next} /></button>
                     <button onClick={this.toggleOpacity} className="social-item"><img src={this.icons.eye} /></button>
                 </div>
                 <div style={{ maxHeight: this.settings.height }}>
@@ -194,7 +180,7 @@ class DSPopover extends Component {
                         </div>
                     }
                 </div>
-            </div>
+            </div >
         )
     }
 }

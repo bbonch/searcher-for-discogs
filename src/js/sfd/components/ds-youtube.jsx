@@ -1,9 +1,11 @@
 'use-strict'
 
 import { Component, createRef } from 'react'
+import { createRoot } from 'react-dom/client'
 import options from '../options'
 import constants from '../constants'
 import DSPopover from './ds-popover.jsx'
+import { Popover } from 'bootstrap'
 
 class DSYouTube extends Component {
     constructor(props) {
@@ -16,24 +18,22 @@ class DSYouTube extends Component {
     }
 
     showPopup = (icon, title) => {
-        $(icon).popover("destroy");
-        $(icon).popover({
-            content: "<ds-popover />",
+        const content = document.createElement("div");
+        const popover = new Popover(icon, {
+            content: content,
             placement: "right",
             trigger: "manual",
-            html: "true"
+            html: true
         });
-        $(icon).popover("show");
+        popover.show();
 
         this.settings.title = title;
-        const popoverElement = document.querySelector(".popover-content ds-popover");
-        const popoverRoot = createRoot(popoverElement);
+        const popoverRoot = createRoot(content);
         popoverRoot.render(<DSPopover settings={this.settings} />);
     }
 
-    handleVideo = (icon) => {
+    handleTrack = (icon) => {
         var track = this.localOptions.getTrack(icon);
-        $(`.${constants.classes.dsIcon}`).popover("destroy");
         track.addClass("visited");
         $(this.localOptions.trackTitle).removeClass("track-selected");
         $(this.localOptions.trackTitle).each(function (index, value) {
@@ -51,30 +51,22 @@ class DSYouTube extends Component {
         this.showPopup(icon, title);
     }
 
-    getIcon = (track) => {
-        var icon = $(track).next();
-        var parent = $(track).parent();
-        var depth = 0;
-        while (!icon.hasClass(constants.classes.dsIcon) && depth < 5) {
-            icon = $(parent).next();
-            parent = $(track).parent();
-            depth++;
-        }
-
-        return icon;
-    }
-
-    getNextTrack = (selectedTrack) => {
-        var parent = $(selectedTrack).parent();
-        var nextTrack = parent.next().find(this.localOptions.trackTitle).get(0);
-        var depth = 0;
+    getNextIcon = (selectedTrack) => {
+        let parent = $(selectedTrack).parent();
+        let nextTrack = parent.next().find(this.localOptions.trackTitle).get(0);
+        let depth = 0;
         while (nextTrack == null && depth < 5) {
             parent = parent.parent();
             nextTrack = parent.next().find(this.localOptions.trackTitle).get(0);
             depth++;
         }
 
-        return nextTrack;
+        if (nextTrack == null) {
+            nextTrack = $(this.localOptions.trackTitle).get(0);
+        }
+        const nextIcon = $(nextTrack).parent().find(`.${constants.classes.dsIcon}`);
+
+        return nextIcon;
     }
 
     onPlayerReady = (event) => {
@@ -86,14 +78,16 @@ class DSYouTube extends Component {
         if (event.data == 0) {
             if (!this.settings.autoPlayRelease) return;
 
-            var selectedTrack = $(this.localOptions.trackTitle + ".track-selected").get(0);
-            var nextTrack = this.getNextTrack(selectedTrack);
-            if (nextTrack == undefined) {
-                nextTrack = $(this.localOptions.trackTitle).get(0);
+            var selectedTrack = $(this.localOptions.trackTitle + ".track-selected");
+            const selectedIcon = selectedTrack.parent().find(`.${constants.classes.dsIcon}`);
+            const popover = Popover.getInstance(selectedIcon);
+            if (popover != null) {
+                popover.hide();
             }
-            var nextIcon = this.getIcon(nextTrack);
 
-            this.handleVideo(nextIcon);
+            var nextIcon = this.getNextIcon(selectedTrack);
+
+            this.handleTrack(nextIcon);
         }
     }
 

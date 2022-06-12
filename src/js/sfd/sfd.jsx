@@ -3,48 +3,33 @@ import constants from './constants.js'
 import DSIcon from './components/ds-icon.jsx'
 import { createRoot } from 'react-dom/client'
 
-const localOptions = options.getOptions();
-
-$(localOptions.trackTitle).toArray().forEach(function (v) {
-    let parent = $(v).parent();
-    let attachedTo = parent.is("a") ? parent : $(v);
-    let iconDS = $("<ds-icon />")
-    attachedTo.after(iconDS);
-});
-
 ga('create', constants.ga.id, 'auto', { 'name': constants.ga.name });
 
-$("body").on("click", function (e) {
-    if ($(e.target).is("." + constants.classes.dsIcon) || $(e.target).is("." + constants.classes.nextBtn) || $(e.target).is("." + constants.classes.prevBtn)) {
-        return;
-    }
-
-    if ($(e.target).is(".popover") || $(".popover").has(e.target).length != 0) {
-        return;
-    }
-
-    $(".popover").popover("destroy");
-});
-
-chrome.storage.sync.get('settings', function (settings) {
-    let settingsJSON =
+chrome.storage.sync.get('settings', function (value) {
+    const settingsJSON =
     {
         defaultSearchSource: constants.searchSources.youTube,
         autoPlayTrack: true,
         autoPlayRelease: true
     };
-    if (settings.settings == undefined || settings.settings == "") {
+    if (value.settings == undefined || value.settings == "") {
         chrome.storage.sync.set({ 'settings': JSON.stringify(settingsJSON) });
     } else {
-        Object.assign(settingsJSON, JSON.parse(settings.settings));
+        Object.assign(settingsJSON, JSON.parse(value.settings));
         if (!Number.isInteger(settingsJSON.defaultSearchSource)) {
             settingsJSON.defaultSearchSource = parseInt(settingsJSON.defaultSearchSource);
         }
     }
 
-    const tracks = document.querySelectorAll("ds-icon");
-    for (let track of tracks) {
-        const root = createRoot(track)
+    const localOptions = options.getOptions();
+    $(localOptions.trackTitle).each((i, element) => {
+        const iconDS = document.createElement("span");
+
+        const parent = $(element).parent();
+        const attachedTo = parent.is("a") ? parent : $(element);
+        attachedTo.after(iconDS);
+
+        const root = createRoot(iconDS)
         root.render(<DSIcon settings={settingsJSON} />)
-    }
+    });
 });

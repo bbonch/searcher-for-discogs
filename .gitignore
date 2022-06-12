@@ -7,4 +7,5 @@ searcher.zip
 .vs
 package-lock.json
 src/js/*.js
+src/js/*.css
 src/js/*.txt

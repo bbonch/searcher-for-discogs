@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client'
 import constants from '../constants'
 import options from '../options'
 import DSPopover from './ds-popover.jsx'
+import { Popover } from 'bootstrap'
 
 class DSIcon extends Component {
     constructor(props) {
@@ -13,32 +14,41 @@ class DSIcon extends Component {
         this.iconRef = createRef()
 
         this.logoUrl = chrome.runtime.getURL(constants.urls.logo)
-        this.dsIconClass = constants.classes.dsIcon
         this.localOptions = options.getOptions()
     }
 
     handleClick = () => {
-        const dsIcon = $(this.iconRef.current);
-        if (dsIcon.parent().has(".popover-content").length) {
-            dsIcon.popover("destroy");
-            return;
-        }
-
         this.updateTrackStyle();
 
         const trackInfo = this.getTrackInfo();
         this.updateGA(trackInfo);
-        this.showPopup(trackInfo.title);
+
+        const dsIcon = $(this.iconRef.current);
+        const popover = Popover.getInstance(dsIcon);
+        if (popover != null) {
+            popover.toggle();
+        } else {
+            this.showPopup(trackInfo.title);
+        }
+
+        $(`.${constants.classes.dsIcon}`).each((i, element) => {
+            if (element == dsIcon.get(0))
+                return;
+
+            const popover = Popover.getInstance(element);
+            if (popover != null) {
+                popover.hide();
+            }
+        });
     }
 
     updateTrackStyle = () => {
         const track = this.localOptions.getTrack(this.iconRef.current);
-        $(`.${constants.classes.dsIcon}`).popover("destroy");
         track.addClass("visited");
         $(this.localOptions.trackTitle).removeClass("track-selected");
-        $(this.localOptions.trackTitle).each((index, value) => {
-            if ($(value).hasClass("visited"))
-                $(value).addClass("track-visited");
+        $(this.localOptions.trackTitle).each((i, element) => {
+            if ($(element).hasClass("visited"))
+                $(element).addClass("track-visited");
         });
         track.removeClass("track-visited");
         track.addClass("track-selected");
@@ -79,27 +89,26 @@ class DSIcon extends Component {
 
     showPopup = (title) => {
         const dsIcon = $(this.iconRef.current)
-        dsIcon.popover("destroy");
-        dsIcon.popover({
-            content: "<ds-popover />",
+        const content = document.createElement("div");
+        const popover = new Popover(dsIcon, {
+            content: content,
             placement: "right",
             trigger: "manual",
-            html: "true"
+            html: true
         });
-        dsIcon.popover("show");
+        popover.show();
 
         const height = this.localOptions.videoFrameHeight;
         const width = this.localOptions.videoFrameWidth;
         const settings = { ...this.props.settings, title: title, height: height, width: width };
 
-        const popoverElement = document.querySelector(".popover-content ds-popover");
-        const popoverRoot = createRoot(popoverElement);
+        const popoverRoot = createRoot(content);
         popoverRoot.render(<DSPopover settings={settings} />);
     }
 
     render() {
         return (
-            <img ref={this.iconRef} className={this.dsIconClass} onClick={this.handleClick} src={this.logoUrl} />
+            <img ref={this.iconRef} className={constants.classes.dsIcon} onClick={this.handleClick} src={this.logoUrl} />
         )
     }
 }

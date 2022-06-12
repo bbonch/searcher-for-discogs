@@ -17,11 +17,10 @@
         "https://rateyourmusic.com/*"
       ],
       "css": [
+        "js/styles.css",
         "css/sfd.css"
       ],
       "js": [
-        "js/libs/jquery-3.3.1.min.js",
-        "js/libs/bootstrap.js",
         "js/libs/yt.js",
         "js/libs/ga.js",
         "js/sfd/load-cs.js"
