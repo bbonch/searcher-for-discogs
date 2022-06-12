@@ -1,7 +1,7 @@
 const discogsOptionsMaster = {
-    trackTitle: "span.tracklist_track_title",
+    trackTitle: "td[class^='trackTitle'] span",
     trackArtist: ".tracklist_track_artists",
-    profileTitle: ".profile #profile_title a",
+    profileTitle: ".title_1q3xW span a",
     videoFrameWidth: 420,
     videoFrameHeight: 300,
     getTrack: function (icon) {
