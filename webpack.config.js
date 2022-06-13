@@ -58,5 +58,8 @@ var config = {
 };
 
 module.exports = (env, argv) => {
+    const devtool = argv.mode == 'production' ? 'source-map' : false;
+    config.devtool = devtool;
+
     return config;
 };
