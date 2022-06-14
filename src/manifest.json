@@ -17,8 +17,7 @@
         "https://rateyourmusic.com/*"
       ],
       "css": [
-        "js/styles.css",
-        "css/sfd.css"
+        "js/styles.css"
       ],
       "js": [
         "js/libs/yt.js",

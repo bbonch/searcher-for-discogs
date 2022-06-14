@@ -8,7 +8,8 @@ var config = {
     entry: {
         sfd: path.resolve(__dirname, "./src/js/sfd/sfd.jsx"),
         settings: path.resolve(__dirname, "./src/js/sfd/settings.jsx"),
-        styles: "./src/js/sfd/styles.js"
+        styles: "./src/js/sfd/styles.js",
+        stylesSettings: "./src/js/sfd/styles-settings.js"
     },
     output: {
         path: path.resolve(__dirname, "./src/js"),
@@ -46,7 +47,7 @@ var config = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: "[name].css",
+            filename: "[name].css"
         }),
         new ESLintPlugin(),
         new Dotenv(),

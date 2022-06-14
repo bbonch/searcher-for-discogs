@@ -1,6 +1,5 @@
 const clean = require('./clean');
 const copy = require('./copy');
-const bundleCSS = require('./bundle-css');
 const updateVariables = require('./update-variables');
 const zip = require('./zip');
 
@@ -23,7 +22,6 @@ function getParameter(args, key) {
 async function build() {
     await clean(buildType);
     await copy();
-    await bundleCSS();
     await updateVariables();
     zip(buildType);
 }
