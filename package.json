@@ -4,8 +4,8 @@
   "description": "Allows to listen to tracks on Discogs by clicking on it.",
   "scripts": {
     "build": "node build/build.js buildType=test",
-    "build-webpack": "webpack --mode=development && npm run build",
-    "release-webpack": "jest && webpack --mode=production && npm run release",
+    "build-webpack": "webpack --mode=development && yarn build",
+    "release-webpack": "jest && webpack --mode=production && yarn release",
     "release": "node build/build.js buildType=prod",
     "test": "jest"
   },
@@ -15,6 +15,7 @@
     "@babel/core": "^7.18.0",
     "@babel/preset-env": "^7.18.2",
     "@babel/preset-react": "^7.17.12",
+    "@popperjs/core": "^2.11.5",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@types/jest": "^27.5.1",
