@@ -1,0 +1,20 @@
+﻿.settings {
+    padding: 15px 0 0 15px;
+
+    .settings-title {
+        font-size: 1.5em;
+        margin-top: 30px;
+
+        &:first-of-type {
+            margin-top: 0;
+        }
+    }
+
+    .setting {
+        padding-top: 15px;
+
+        .setting-children {
+            padding-left: 15px;
+        }
+    }
+}
