@@ -24,7 +24,12 @@ export default {
     },
     ga: {
         id: "UA-50788406-1",
-        name: "discogsSearcher"
+        name: "discogsSearcher",
+        events: {
+            youTube: "YouTube",
+            spotify: "Spotify",
+            deezer: "Deezer"
+        }
     },
     youTube: {
         api: "https://www.googleapis.com/youtube/v3/search?part=snippet&q={q}&key={key}",
@@ -44,5 +49,9 @@ export default {
             embed: "https://www.deezer.com/plugins/player?format=classic&width={width}&height={height}&color=000000&layout=light&size=medium&type=tracks&id={trackId}"
         },
         auth: "frnn1og3OlkyIu2M96IvygSwlZiLlwgpvwJXqJ4HewETYBD2Jf"
+    },
+    player: {
+        width: 420,
+        height: 300
     }
 }

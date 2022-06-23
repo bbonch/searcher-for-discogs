@@ -21,7 +21,8 @@
         "$": "readonly",
         "chrome": "readonly",
         "ga": "readonly",
-        "process": "readonly"
+        "process": "readonly",
+        "constants": "readonly"
     },
     "settings": {
         "react": {

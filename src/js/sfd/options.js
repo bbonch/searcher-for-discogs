@@ -1,9 +1,7 @@
 const discogsOptionsMaster = {
     trackTitle: "td[class^='trackTitle'] span",
-    trackArtist: ".tracklist_track_artists",
+    trackArtist: ".artist_1mUch",
     profileTitle: ".title_1q3xW span a",
-    videoFrameWidth: 420,
-    videoFrameHeight: 300,
     getTrack: function (icon) {
         const prev = $(icon).parent().prev();
         const track = prev.is("span") ? prev : prev.find("span");
@@ -14,7 +12,7 @@ const discogsOptionsMaster = {
         return $(track).html();
     },
     getArtistName: function (icon) {
-        const trackArtist = $(icon).parent().parent().find(this.trackArtist);
+        const trackArtist = $(icon).parent().parent().parent().find(this.trackArtist);
         const trackArtistLink = trackArtist.find("a");
 
         let artistName = '';
@@ -27,6 +25,15 @@ const discogsOptionsMaster = {
         artistName = artistName.replace('&amp;', '&').replace(/\(\d*\)/, '');
 
         return artistName;
+    },
+    getStyle: function () {
+        const styleXPath = document.evaluate("//th[contains(., 'Style')]", document, null, XPathResult.ANY_TYPE, null);
+        if (styleXPath == null)
+            return null;
+
+        const style = $(styleXPath.iterateNext()).next().text();
+
+        return style;
     }
 }
 
@@ -34,8 +41,6 @@ const discogsOptionsRelease = {
     trackTitle: "span.trackTitle_CTKp4",
     trackArtist: ".artist_3zAQD",
     profileTitle: ".title_1q3xW a",
-    videoFrameWidth: 420,
-    videoFrameHeight: 300,
     getTrack: function (icon) {
         const prev = $(icon).parent().prev();
         const track = prev.is("span") ? prev : prev.find("span");
@@ -46,7 +51,7 @@ const discogsOptionsRelease = {
         return $(track).html();
     },
     getArtistName: function (icon) {
-        const trackArtist = $(icon).parent().parent().find(this.trackArtist);
+        const trackArtist = $(icon).parent().parent().parent().find(this.trackArtist);
         const trackArtistLink = trackArtist.find("a");
 
         let artistName = '';
@@ -59,46 +64,53 @@ const discogsOptionsRelease = {
         artistName = artistName.replace('&amp;', '&').replace(/\(\d*\)/, '');
 
         return artistName;
+    },
+    getStyle: function () {
+        const styleXPath = document.evaluate("//th[contains(., 'Style')]", document, null, XPathResult.ANY_TYPE, null);
+        if (styleXPath == null)
+            return null;
+
+        const style = $(styleXPath.iterateNext()).next().text();
+
+        return style;
     }
 }
 
 const rymOptions = {
     trackTitle: '.tracklist_title > :first-child',
     profileTitle: ".album_info .artist",
-    videoFrameWidth: 420,
-    videoFrameHeight: 300,
     getTrack: function (icon) {
-        return $(icon).parent().prev();
+        return $(icon).parent().prev().find('span');
     },
     getTrackName: function (track) {
-        let parts = $(track).text().split('-');
+        let parts = $(track).text().split('–');
         let trackName = parts.length == 2 ? parts[1].trim() : parts[0].trim();
 
         return trackName;
     },
     getArtistName: function (icon) {
-        const artistNameLink = $(icon).prev().children();
-        
+        const artistNameLink = $(icon).parent().prev().find('a');
+
         let artistName = $(this.profileTitle).html();
-        if (artistNameLink.length == 1 && $(artistNameLink[0]).is('a')) {
-            artistName = $(artistNameLink[0]).text().trim();
+        if (artistNameLink.length > 0) {
+            artistName = $(artistNameLink).text().trim();
         }
         artistName = artistName.replace('&amp;', '&').replace(/\(\d*\)/, '');
 
         return artistName;
+    },
+    getStyle: function () {
+        return $("meta[itemprop='genre']")[0].content;
     }
 };
 
-export default {
-    getOptions() {
-        if (window.location.href.match(".*discogs\.com/master.*")) {
-            return discogsOptionsMaster;
-        } else if (window.location.href.match(".*discogs\.com/release.*")) {
-            return discogsOptionsRelease;
-        } else if (window.location.host.match(".*rateyourmusic.*")) {
-            return rymOptions;
-        } else {
-            return discogsOptionsRelease;
-        }
-    }
+let exportOptions = discogsOptionsRelease
+if (window.location.href.match(".*discogs\.com/master.*")) {
+    exportOptions = discogsOptionsMaster;
+} else if (window.location.href.match(".*discogs\.com/release.*")) {
+    exportOptions = discogsOptionsRelease;
+} else if (window.location.host.match(".*rateyourmusic.*")) {
+    exportOptions = rymOptions;
 }
+
+export default exportOptions

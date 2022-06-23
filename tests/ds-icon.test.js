@@ -13,6 +13,8 @@ beforeAll(() => {
       }
     }
   }
+
+  global.constants = constants
 })
 
 test('renders to img with src defined', () => {

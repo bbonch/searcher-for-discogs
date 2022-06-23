@@ -1,19 +1,20 @@
 'use-strict'
 
 import { Component } from "react"
-import constants from "../constants"
 
 class DSDeezer extends Component {
     constructor(props) {
         super(props)
-        this.settings = props.settings
+
+        this.dsTitle = props.dsTitle
+
         this.state = { src: null }
     }
 
     loadVideo = () => {
         const $this = this;
         chrome.runtime.sendMessage({
-            url: constants.deezer.api.search.replace("{q}", $this.settings.title),
+            url: constants.deezer.api.search.replace("{q}", $this.dsTitle),
             type: "GET",
             auth: `Bearer ${constants.deezer.auth}`,
             method: "getQueryResult",
@@ -25,8 +26,8 @@ class DSDeezer extends Component {
                     $this.setState({
                         src: constants.deezer.api.embed
                             .replace("{trackId}", result.data[0].id)
-                            .replace("{height}", $this.settings.height)
-                            .replace("{width}", $this.settings.width)
+                            .replace("{height}", constants.player.height)
+                            .replace("{width}", constants.player.width)
                     });
             } else {
                 console.log(r.error);
@@ -40,7 +41,7 @@ class DSDeezer extends Component {
 
     render() {
         return (
-            <iframe src={this.state.src} height={this.settings.height} width={this.settings.width} frameBorder="0"></iframe>
+            <iframe src={this.state.src} height={constants.player.height} width={constants.player.width} frameBorder="0"></iframe>
         )
     }
 }

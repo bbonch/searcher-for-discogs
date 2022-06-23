@@ -1,12 +1,13 @@
 'use-strict'
 
 import { Component } from "react"
-import constants from "../constants"
 
 class DSSpotify extends Component {
     constructor(props) {
         super(props)
-        this.settings = props.settings
+        
+        this.dsTitle = props.dsTitle
+
         this.state = { src: null }
     }
 
@@ -25,7 +26,7 @@ class DSSpotify extends Component {
                 const result = JSON.parse(r.result)
                 if (result != undefined && result.access_token != undefined) {
                     chrome.runtime.sendMessage({
-                        url: constants.spotify.api.search.replace("{q}", $this.settings.title),
+                        url: constants.spotify.api.search.replace("{q}", $this.dsTitle),
                         type: "GET",
                         auth: "Bearer " + result.access_token,
                         method: "getQueryResult"
@@ -57,7 +58,7 @@ class DSSpotify extends Component {
 
     render() {
         return (
-            <iframe src={this.state.src} height={this.settings.height} width={this.settings.width} frameBorder="0"></iframe>
+            <iframe src={this.state.src} height={constants.player.height} width={constants.player.width} frameBorder="0"></iframe>
         )
     }
 }

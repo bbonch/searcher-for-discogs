@@ -1,28 +1,27 @@
 import options from './options.js'
-import constants from './constants.js'
 import DSIcon from './components/ds-icon.jsx'
 import { createRoot } from 'react-dom/client'
+import { init } from './analytics-service.js'
 
-ga('create', constants.ga.id, 'auto', { 'name': constants.ga.name });
+init()
 
 chrome.storage.sync.get('settings', function (value) {
-    const settingsJSON =
+    const settings =
     {
         defaultSearchSource: constants.searchSources.youTube,
         autoPlayTrack: true,
         autoPlayRelease: true
     };
     if (value.settings == undefined || value.settings == "") {
-        chrome.storage.sync.set({ 'settings': JSON.stringify(settingsJSON) });
+        chrome.storage.sync.set({ 'settings': JSON.stringify(settings) });
     } else {
-        Object.assign(settingsJSON, JSON.parse(value.settings));
-        if (!Number.isInteger(settingsJSON.defaultSearchSource)) {
-            settingsJSON.defaultSearchSource = parseInt(settingsJSON.defaultSearchSource);
+        Object.assign(settings, JSON.parse(value.settings));
+        if (!Number.isInteger(settings.defaultSearchSource)) {
+            settings.defaultSearchSource = parseInt(settings.defaultSearchSource);
         }
     }
 
-    const localOptions = options.getOptions();
-    $(localOptions.trackTitle).each((i, element) => {
+    $(options.trackTitle).each((i, element) => {
         const iconDS = document.createElement("span");
 
         const parent = $(element).parent();
@@ -30,6 +29,6 @@ chrome.storage.sync.get('settings', function (value) {
         attachedTo.after(iconDS);
 
         const root = createRoot(iconDS)
-        root.render(<DSIcon settings={settingsJSON} />)
+        root.render(<DSIcon settings={settings} />)
     });
 });

@@ -1,6 +1,5 @@
 ﻿import { createRoot } from 'react-dom/client';
 import { createRef, Component } from 'react'
-import constants from './constants';
 
 class Setting extends Component {
     constructor(props) {

@@ -1,18 +1,20 @@
 'use-strict'
 
 import { Component } from 'react'
-import { createRoot } from 'react-dom/client'
-import options from '../options'
-import constants from '../constants'
 import DSYouTube from './ds-youtube.jsx'
 import DSSpotify from './ds-spotify.jsx'
 import DSDeezer from './ds-deezer.jsx'
-import { Popover } from 'bootstrap'
+import { sendEvent } from '../analytics-service'
+import { setupPopover, getNextIcon, getPrevIcon } from '../popover-service'
+import constants from '../constants'
 
 class DSPopover extends Component {
     constructor(props) {
         super(props)
+
         this.settings = props.settings
+        this.dsIcon = props.dsIcon
+        this.dsTitle = props.dsTitle
         this.state = { defaultSearchSource: this.settings.defaultSearchSource }
 
         this.icons = {
@@ -26,7 +28,6 @@ class DSPopover extends Component {
         }
         this.settingsPage = chrome.runtime.getURL(constants.pages.settings)
         this.opacity = 1
-        this.localOptions = options.getOptions()
     }
 
     changeSearchSource = (searchSource) => {
@@ -42,22 +43,22 @@ class DSPopover extends Component {
             switch (this.state.defaultSearchSource) {
                 case constants.searchSources.youTube:
                     {
-                        gaEvent = 'YouTube';
+                        gaEvent = constants.ga.events.youTube;
                         icon = this.icons.youTube;
                     } break;
                 case constants.searchSources.spotify:
                     {
-                        gaEvent = 'Spotify';
+                        gaEvent = constants.ga.events.spotify;
                         icon = this.icons.spotify;
                     } break;
                 case constants.searchSources.deezer:
                     {
-                        gaEvent = 'Deezer';
+                        gaEvent = constants.ga.events.deezer;
                         icon = this.icons.deezer;
                     } break;
             }
 
-            ga('discogsSearcher.send', 'event', document.url, gaEvent);
+            sendEvent(gaEvent);
 
             return icon;
         }
@@ -68,85 +69,15 @@ class DSPopover extends Component {
         $(".popover").css("opacity", this.opacity);
     }
 
-    changeTrack = (getTrack) => {
-        const selectedTrack = $(this.localOptions.trackTitle + ".track-selected");
-        const selectedIcon = selectedTrack.parent().find(`.${constants.classes.dsIcon}`);
-        const popover = Popover.getInstance(selectedIcon);
-        if (popover != null) {
-            popover.hide();
-        }
+    changeTrack = (getNewIcon) => {
+        const newIcon = getNewIcon(this.dsIcon);
 
-        const newTrack = getTrack(selectedTrack);
-        if (newTrack == undefined)
-            return;
-        const newIcon = $(newTrack).parent().find(`.${constants.classes.dsIcon}`);
-
-        this.handleTrack(newIcon);
-    }
-
-    showPopup = (icon, title) => {
-        const content = document.createElement("div");
-        const popover = new Popover(icon, {
-            content: content,
-            placement: "right",
-            trigger: "manual",
-            html: true
-        });
-        popover.show();
-
-        this.settings.title = title;
-        const popoverRoot = createRoot(content);
-        popoverRoot.render(<DSPopover settings={this.settings} />);
-    }
-
-    handleTrack = (icon) => {
-        var track = this.localOptions.getTrack(icon);
-        track.addClass("visited");
-        $(this.localOptions.trackTitle).removeClass("track-selected");
-        $(this.localOptions.trackTitle).each(function (index, value) {
-            if ($(value).hasClass("visited"))
-                $(value).addClass("track-visited");
-        });
-        track.removeClass("track-visited");
-        track.addClass("track-selected");
-
-        var trackName = this.localOptions.getTrackName(track);
-        var trackArtistName = this.localOptions.getArtistName(icon);
-        var title = trackArtistName + " " + trackName.trim();
-        title = encodeURIComponent(title.trim());
-
-        this.showPopup(icon, title);
-    }
-
-    getNextTrack = (selectedTrack) => {
-        var parent = $(selectedTrack).parent();
-        var nextTrack = parent.next().find(this.localOptions.trackTitle).get(0);
-        var depth = 0;
-        while (nextTrack == null && depth < 5) {
-            parent = parent.parent();
-            nextTrack = parent.next().find(this.localOptions.trackTitle).get(0);
-            depth++;
-        }
-
-        return nextTrack;
-    }
-
-    getPrevTrack = (selectedTrack) => {
-        var parent = $(selectedTrack).parent();
-        var prevTrack = parent.prev().find(this.localOptions.trackTitle).get(0);
-        var depth = 0;
-        while (prevTrack == null && depth < 5) {
-            parent = parent.parent();
-            prevTrack = parent.prev().find(this.localOptions.trackTitle).get(0);
-            depth++;
-        }
-
-        return prevTrack;
+        setupPopover(newIcon, this.settings);
     }
 
     render() {
         return (
-            <div className="ds-content">
+            <>
                 <div className="discogs-searcher">
                     <div className="dropdown social-item">
                         <button className="social-item" data-bs-toggle="dropdown">
@@ -159,28 +90,28 @@ class DSPopover extends Component {
                         </ul>
                     </div>
                     <a className="social-item" target="_blank" href={this.settingsPage}><img className="settings-btn" src={this.icons.settings} /></a>
-                    <button onClick={() => this.changeTrack(this.getPrevTrack)} className="social-item"><img className="prev-btn" src={this.icons.prev} /></button>
-                    <button onClick={() => this.changeTrack(this.getNextTrack)} className="social-item"><img className="next-btn" src={this.icons.next} /></button>
+                    <button onClick={() => this.changeTrack(getPrevIcon)} className="social-item"><img className="prev-btn" src={this.icons.prev} /></button>
+                    <button onClick={() => this.changeTrack(getNextIcon)} className="social-item"><img className="next-btn" src={this.icons.next} /></button>
                     <button onClick={this.toggleOpacity} className="social-item"><img src={this.icons.eye} /></button>
                 </div>
-                <div style={{ maxHeight: this.settings.height }}>
+                <div style={{ maxHeight: constants.player.height }}>
                     {this.state.defaultSearchSource == constants.searchSources.youTube &&
                         <div>
-                            <DSYouTube settings={this.settings} />
+                            <DSYouTube settings={this.settings} dsTitle={this.dsTitle} dsIcon={this.dsIcon} />
                         </div>
                     }
                     {this.state.defaultSearchSource == constants.searchSources.spotify &&
                         <div>
-                            <DSSpotify settings={this.settings} />
+                            <DSSpotify dsTitle={this.dsTitle} />
                         </div>
                     }
                     {this.state.defaultSearchSource == constants.searchSources.deezer &&
                         <div>
-                            <DSDeezer settings={this.settings} />
+                            <DSDeezer dsTitle={this.dsTitle} />
                         </div>
                     }
                 </div>
-            </div >
+            </>
         )
     }
 }
