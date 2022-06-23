@@ -1,7 +1,8 @@
-import options from './options.js'
+import options from './services/options.js'
 import DSIcon from './components/ds-icon.jsx'
 import { createRoot } from 'react-dom/client'
-import { init } from './analytics-service.js'
+import { init } from './services/analytics-service.js'
+import '../../css/styles.scss'
 
 init()
 

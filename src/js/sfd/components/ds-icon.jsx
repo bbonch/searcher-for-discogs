@@ -1,7 +1,7 @@
 'use strict'
 
 import { Component } from 'react'
-import { setupPopover } from '../popover-service'
+import { setupPopover } from '../services/popover-service'
 
 class DSIcon extends Component {
     constructor(props) {

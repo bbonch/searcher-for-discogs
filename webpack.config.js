@@ -7,12 +7,10 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 var config = {
     entry: {
         sfd: path.resolve(__dirname, "./src/js/sfd/sfd.jsx"),
-        settings: path.resolve(__dirname, "./src/js/sfd/settings.jsx"),
-        styles: "./src/js/sfd/styles.js",
-        stylesSettings: "./src/js/sfd/styles-settings.js"
+        settings: path.resolve(__dirname, "./src/js/sfd/settings.jsx")
     },
     output: {
-        path: path.resolve(__dirname, "./src/js"),
+        path: path.resolve(__dirname, "./src/dist"),
         filename: "[name].js"
     },
     devtool: false,
@@ -54,7 +52,7 @@ var config = {
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
-            constants: [path.resolve(__dirname, "./src/js/sfd/constants.js"), 'default']
+            constants: [path.resolve(__dirname, "./src/js/sfd/services/constants.js"), 'default']
         })
     ]
 };

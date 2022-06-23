@@ -4,9 +4,8 @@ import { Component } from 'react'
 import DSYouTube from './ds-youtube.jsx'
 import DSSpotify from './ds-spotify.jsx'
 import DSDeezer from './ds-deezer.jsx'
-import { sendEvent } from '../analytics-service'
-import { setupPopover, getNextIcon, getPrevIcon } from '../popover-service'
-import constants from '../constants'
+import { sendEvent } from '../services/analytics-service'
+import { setupPopover, getNextIcon, getPrevIcon } from '../services/popover-service'
 
 class DSPopover extends Component {
     constructor(props) {

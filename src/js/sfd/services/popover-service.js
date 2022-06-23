@@ -1,7 +1,7 @@
 import { sendEvent, sendDimension } from './analytics-service'
 import { Popover } from 'bootstrap'
 import options from './options';
-import DSPopover from './components/ds-popover.jsx'
+import DSPopover from '../components/ds-popover.jsx'
 import { createRoot } from 'react-dom/client'
 
 function setupPopover(dsIcon, settings) {

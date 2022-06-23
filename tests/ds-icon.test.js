@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import DSIcon from '../src/js/sfd/components/ds-icon'
-import constants from '../src/js/sfd/constants'
+import constants from '../src/js/sfd/services/constants'
 
 const testSrc = 'some-src'
 

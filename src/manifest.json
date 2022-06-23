@@ -17,12 +17,12 @@
         "https://rateyourmusic.com/*"
       ],
       "css": [
-        "js/styles.css"
+        "dist/sfd.css"
       ],
       "js": [
-        "js/libs/yt.js",
-        "js/libs/ga.js",
-        "js/sfd/load-cs.js"
+        "libs/yt.js",
+        "libs/ga.js",
+        "dist/load-cs.js"
       ]
     }
   ],
@@ -39,7 +39,7 @@
         "images/*.jpg",
         "fonts/*.*",
         "*.html",
-        "js/sfd.js"
+        "dist/sfd.js"
       ],
       "matches": [
         "https://*.discogs.com/*",

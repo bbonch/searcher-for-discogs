@@ -1,8 +1,8 @@
 'use-strict'
 
 import { Component, createRef } from 'react'
-import { setupPopover } from '../popover-service'
-import { getNextIcon } from '../popover-service'
+import { setupPopover } from '../services/popover-service'
+import { getNextIcon } from '../services/popover-service'
 
 class DSYouTube extends Component {
     constructor(props) {
