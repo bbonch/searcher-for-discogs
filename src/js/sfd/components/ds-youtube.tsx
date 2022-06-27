@@ -1,11 +1,14 @@
-'use-strict'
-
-import { Component, createRef } from 'react'
+import React, { createRef } from 'react'
 import { setupPopover } from '../services/popover-service'
 import { getNextIcon } from '../services/popover-service'
 
-class DSYouTube extends Component {
-    constructor(props) {
+class DSYouTube extends React.Component<DSYouTubeProps> {
+    settings: DSSettings
+    dsIcon: HTMLImageElement
+    dsTitle: string
+    youTubeRef: React.RefObject<HTMLDivElement>
+
+    constructor(props: DSYouTubeProps) {
         super(props)
 
         this.settings = props.settings
@@ -48,10 +51,9 @@ class DSYouTube extends Component {
                         if (videoId != null)
                             break;
                     }
-                } catch (e) {
-                }
+                } catch (e) { }
 
-                if (videoId != null && videoId != "") {
+                if (videoId != null) {
                     new YT.Player($this.youTubeRef.current, {
                         height: constants.player.height,
                         width: constants.player.width,

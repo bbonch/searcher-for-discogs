@@ -1,14 +1,14 @@
-'use-strict'
+import React from "react"
 
-import { Component } from "react"
+class DSDeezer extends React.Component<DSDeezerProps, DSDeezerState> {
+    dsTitle: string
 
-class DSDeezer extends Component {
-    constructor(props) {
+    constructor(props: DSDeezerProps) {
         super(props)
 
         this.dsTitle = props.dsTitle
 
-        this.state = { src: null }
+        this.state = { src: '' }
     }
 
     loadVideo = () => {
@@ -26,8 +26,8 @@ class DSDeezer extends Component {
                     $this.setState({
                         src: constants.deezer.api.embed
                             .replace("{trackId}", result.data[0].id)
-                            .replace("{height}", constants.player.height)
-                            .replace("{width}", constants.player.width)
+                            .replace("{height}", constants.player.height.toString())
+                            .replace("{width}", constants.player.width.toString())
                     });
             } else {
                 console.log(r.error);

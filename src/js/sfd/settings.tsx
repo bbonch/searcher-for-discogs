@@ -1,25 +1,20 @@
 ﻿import { createRoot } from 'react-dom/client';
-import { createRef, Component } from 'react'
+import React from 'react'
 import '../../css/settings.scss'
 
-class Setting extends Component {
-    constructor(props) {
+class Setting extends React.Component<SettingProps> {
+    constructor(props: SettingProps) {
         super(props);
-
-        this.input = createRef();
-
-        this.onChange = this.onChange.bind(this);
     }
 
-    onChange(event) {
-        let changedValue = null;
+    onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let changedValue: number | boolean | null = null;
         if (this.props.type == 'radio') {
-            changedValue = event.target.value;
+            changedValue = parseInt(event.target.value);
         } else if (this.props.type == 'checkbox') {
             changedValue = event.target.checked;
-        } else {
-            changedValue = event.target.value;
         }
+
         this.props.onChange(this.props.name, changedValue);
     }
 
@@ -29,7 +24,6 @@ class Setting extends Component {
                 <input
                     type={this.props.type}
                     name={this.props.name}
-                    ref={this.input}
                     value={this.props.value}
                     onChange={this.onChange}
                     checked={this.props.checked}
@@ -41,8 +35,8 @@ class Setting extends Component {
     }
 }
 
-class Settings extends Component {
-    constructor(props) {
+class Settings extends React.Component<{}, DSSettings> {
+    constructor(props: {}) {
         super(props);
 
         this.state = {
@@ -51,22 +45,25 @@ class Settings extends Component {
             autoPlayRelease: true
         };
 
-        const thisReact = this;
-        chrome.storage.sync.get('settings', function (value) {
-            if (value.settings == undefined || value.settings == "") {
-                chrome.storage.sync.set({ 'settings': JSON.stringify(thisReact.state) });
+        const $this = this;
+        chrome.storage.sync.get(constants.storageKey, function (value: DSStorageSettings) {
+            if (value.settings == null || value.settings == "") {
+                chrome.storage.sync.set({ [constants.storageKey]: JSON.stringify($this.state) });
             } else {
-                const stateCopy = Object.assign(thisReact.state, JSON.parse(value.settings));
-                thisReact.setState(stateCopy);
+                const stateCopy = Object.assign($this.state, JSON.parse(value.settings));
+                $this.setState(stateCopy);
             }
         });
     }
 
-    settingChanged(name, value) {
-        let stateCopy = Object.assign({}, this.state);
+    settingChanged = (name: string, value: number | boolean | null) => {
+        if (value == null)
+            return;
+            
+        const stateCopy: DSSettings = Object.assign({}, this.state);
         stateCopy[name] = value;
         this.setState(stateCopy, function () {
-            chrome.storage.sync.set({ 'settings': JSON.stringify(this.state) });
+            chrome.storage.sync.set({ [constants.storageKey]: JSON.stringify(this.state) });
         });
     }
 
@@ -80,21 +77,21 @@ class Settings extends Component {
                     value={constants.searchSources.youTube}
                     title='YouTube'
                     checked={this.state.defaultSearchSource == constants.searchSources.youTube}
-                    onChange={(name, value) => this.settingChanged(name, value)}
+                    onChange={this.settingChanged}
                 >
                     <Setting
                         type='checkbox'
                         name='autoPlayTrack'
                         title='Autoplay track'
                         checked={this.state.autoPlayTrack}
-                        onChange={(name, value) => this.settingChanged(name, value)}
+                        onChange={this.settingChanged}
                     />
                     <Setting
                         type='checkbox'
                         name='autoPlayRelease'
                         title='Autoplay release'
                         checked={this.state.autoPlayRelease}
-                        onChange={(name, value) => this.settingChanged(name, value)}
+                        onChange={this.settingChanged}
                     />
                 </Setting>
                 <Setting
@@ -103,7 +100,7 @@ class Settings extends Component {
                     value={constants.searchSources.spotify}
                     title='Spotify'
                     checked={this.state.defaultSearchSource == constants.searchSources.spotify}
-                    onChange={(name, value) => this.settingChanged(name, value)}
+                    onChange={this.settingChanged}
                 />
                 <Setting
                     type='radio'
@@ -111,12 +108,13 @@ class Settings extends Component {
                     value={constants.searchSources.deezer}
                     title='Deezer'
                     checked={this.state.defaultSearchSource == constants.searchSources.deezer}
-                    onChange={(name, value) => this.settingChanged(name, value)}
+                    onChange={this.settingChanged}
                 />
             </div>
         );
     }
 }
 
-const root = createRoot(document.getElementById('settings'))
+const settingsElement = document.getElementById('settings') as HTMLElement
+const root = createRoot(settingsElement)
 root.render(<Settings />)

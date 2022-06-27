@@ -1,4 +1,5 @@
-export default {
+const constants: DSConstants = {
+    storageKey: 'settings',
     classes: {
         dsIcon: "click-icon-ds",
         nextBtn: "next-btn",
@@ -28,12 +29,18 @@ export default {
         events: {
             youTube: "YouTube",
             spotify: "Spotify",
-            deezer: "Deezer"
+            deezer: "Deezer",
+            clicked: "clicked"
+        },
+        dimensions: {
+            dimension2: "dimension2",
+            dimension4: "dimension4",
+            dimension5: "dimension5"
         }
     },
     youTube: {
         api: "https://www.googleapis.com/youtube/v3/search?part=snippet&q={q}&key={key}",
-        key: process.env.YOUTUBE_KEY
+        key: process.env.YOUTUBE_KEY as string
     },
     spotify: {
         api: {
@@ -55,3 +62,5 @@ export default {
         height: 300
     }
 }
+
+export default constants

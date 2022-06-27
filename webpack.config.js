@@ -6,21 +6,17 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 var config = {
     entry: {
-        sfd: path.resolve(__dirname, "./src/js/sfd/sfd.jsx"),
-        settings: path.resolve(__dirname, "./src/js/sfd/settings.jsx")
+        sfd: path.resolve(__dirname, "./src/js/sfd/sfd.tsx"),
+        settings: path.resolve(__dirname, "./src/js/sfd/settings.tsx")
     },
     output: {
-        path: path.resolve(__dirname, "./src/dist"),
         filename: "[name].js"
     },
-    devtool: false,
     module: {
         rules: [{
-            test: /\.m?jsx?$/,
-            exclude: /node_modules/,
-            use: {
-                loader: "babel-loader"
-            }
+            test: /\.(t|j)sx?$/,
+            use: { loader: 'ts-loader' },
+            exclude: /node_modules/
         }, {
             test: /\.(scss)$/,
             use: [{
@@ -41,6 +37,11 @@ var config = {
             }, {
                 loader: 'sass-loader'
             }]
+        }, {
+            enforce: "pre",
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: "source-map-loader"
         }]
     },
     plugins: [
@@ -52,9 +53,12 @@ var config = {
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
-            constants: [path.resolve(__dirname, "./src/js/sfd/services/constants.js"), 'default']
+            constants: [path.resolve(__dirname, "./src/js/sfd/services/constants.ts"), 'default']
         })
-    ]
+    ],
+    resolve: {
+        extensions: [".ts", ".tsx", ".js", ".jsx"]
+    }
 };
 
 module.exports = (env, argv) => {
