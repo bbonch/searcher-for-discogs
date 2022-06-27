@@ -1,4 +1,4 @@
-const discogsOptionsMaster = {
+const discogsOptionsMaster: DSOptions = {
     trackTitle: "td[class^='trackTitle'] span",
     trackArtist: ".artist_1mUch",
     profileTitle: ".title_1q3xW span a",
@@ -11,8 +11,8 @@ const discogsOptionsMaster = {
     getTrackName: function (track) {
         return $(track).html();
     },
-    getArtistName: function (icon) {
-        const trackArtist = $(icon).parent().parent().parent().find(this.trackArtist);
+    getArtistName: function (this: DSOptions, icon) {
+        const trackArtist = $(icon).parent().parent().parent().find(this.trackArtist as string);
         const trackArtistLink = trackArtist.find("a");
 
         let artistName = '';
@@ -31,18 +31,22 @@ const discogsOptionsMaster = {
         if (styleXPath == null)
             return null;
 
-        const style = $(styleXPath.iterateNext()).next().text();
+        const iterateNextResult = styleXPath.iterateNext();
+        if (iterateNextResult == null)
+            return null;
+
+        const style = $(iterateNextResult).next().text();
 
         return style;
     }
 }
 
-const discogsOptionsRelease = {
+const discogsOptionsRelease: DSOptions = {
     trackTitle: "span.trackTitle_CTKp4",
     trackArtist: ".artist_3zAQD",
     profileTitle: ".title_1q3xW a",
-    getTrack: function (icon) {
-        const prev = $(icon).parent().prev();
+    getTrack: function (dsIcon) {
+        const prev = $(dsIcon).parent().prev();
         const track = prev.is("span") ? prev : prev.find("span");
 
         return track;
@@ -50,8 +54,8 @@ const discogsOptionsRelease = {
     getTrackName: function (track) {
         return $(track).html();
     },
-    getArtistName: function (icon) {
-        const trackArtist = $(icon).parent().parent().parent().find(this.trackArtist);
+    getArtistName: function (this: DSOptions, dsIcon) {
+        const trackArtist = $(dsIcon).parent().parent().parent().find(this.trackArtist as string);
         const trackArtistLink = trackArtist.find("a");
 
         let artistName = '';
@@ -70,17 +74,21 @@ const discogsOptionsRelease = {
         if (styleXPath == null)
             return null;
 
-        const style = $(styleXPath.iterateNext()).next().text();
+        const iterateNextResult = styleXPath.iterateNext();
+        if (iterateNextResult == null)
+            return null;
+
+        const style = $(iterateNextResult).next().text();
 
         return style;
     }
 }
 
-const rymOptions = {
+const rymOptions: DSOptions = {
     trackTitle: '.tracklist_title > :first-child',
     profileTitle: ".album_info .artist",
-    getTrack: function (icon) {
-        return $(icon).parent().prev().find('span');
+    getTrack: function (dsIcon) {
+        return $(dsIcon).parent().prev().find('span');
     },
     getTrackName: function (track) {
         let parts = $(track).text().split('–');
@@ -88,8 +96,8 @@ const rymOptions = {
 
         return trackName;
     },
-    getArtistName: function (icon) {
-        const artistNameLink = $(icon).parent().prev().find('a');
+    getArtistName: function (dsIcon) {
+        const artistNameLink = $(dsIcon).parent().prev().find('a');
 
         let artistName = $(this.profileTitle).html();
         if (artistNameLink.length > 0) {
@@ -100,7 +108,7 @@ const rymOptions = {
         return artistName;
     },
     getStyle: function () {
-        return $("meta[itemprop='genre']")[0].content;
+        return $("meta[itemprop='genre']")[0].textContent;
     }
 };
 

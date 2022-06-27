@@ -1,14 +1,14 @@
-'use-strict'
+import React from "react"
 
-import { Component } from "react"
+class DSSpotify extends React.Component<DSSpotifyProps, DSSpotifyState> {
+    dsTitle: string
 
-class DSSpotify extends Component {
-    constructor(props) {
+    constructor(props: DSSpotifyProps) {
         super(props)
-        
+
         this.dsTitle = props.dsTitle
 
-        this.state = { src: null }
+        this.state = { src: '' }
     }
 
     loadVideo = () => {

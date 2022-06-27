@@ -1,20 +1,28 @@
-'use-strict'
-
-import { Component } from 'react'
-import DSYouTube from './ds-youtube.jsx'
-import DSSpotify from './ds-spotify.jsx'
-import DSDeezer from './ds-deezer.jsx'
+import React from 'react'
+import DSYouTube from './ds-youtube'
+import DSSpotify from './ds-spotify'
+import DSDeezer from './ds-deezer'
 import { sendEvent } from '../services/analytics-service'
-import { setupPopover, getNextIcon, getPrevIcon } from '../services/popover-service'
+import { setupPopover, getNextIcon, getPrevIcon, getSearchSourceIcon } from '../services/popover-service'
 
-class DSPopover extends Component {
-    constructor(props) {
+class DSPopover extends React.Component<DSPopoverProps, DSPopoverState> {
+    private settings: DSSettings
+    private dsIcon: HTMLImageElement
+    private dsTitle: string
+    private icons: { eye: string; youTube: string; spotify: string; deezer: string; settings: string; prev: string; next: string }
+    private settingsPage: string
+    private opacity: number
+
+    constructor(props: DSPopoverProps) {
         super(props)
 
         this.settings = props.settings
         this.dsIcon = props.dsIcon
         this.dsTitle = props.dsTitle
-        this.state = { defaultSearchSource: this.settings.defaultSearchSource }
+        this.state = {
+            searchSource: this.settings.defaultSearchSource,
+            searchSourceIcon: getSearchSourceIcon(this.settings.defaultSearchSource)
+        }
 
         this.icons = {
             eye: chrome.runtime.getURL(constants.urls.eye),
@@ -29,38 +37,13 @@ class DSPopover extends Component {
         this.opacity = 1
     }
 
-    changeSearchSource = (searchSource) => {
+    changeSearchSource = (searchSource: number, searchSourceIcon: string, searchSourceEvent: string) => {
         this.setState({
-            defaultSearchSource: searchSource
+            searchSource: searchSource,
+            searchSourceIcon: searchSourceIcon
         })
-    }
 
-    getSearchSourceUrl = () => {
-        if (this.settings) {
-            let gaEvent = '';
-            let icon = '';
-            switch (this.state.defaultSearchSource) {
-                case constants.searchSources.youTube:
-                    {
-                        gaEvent = constants.ga.events.youTube;
-                        icon = this.icons.youTube;
-                    } break;
-                case constants.searchSources.spotify:
-                    {
-                        gaEvent = constants.ga.events.spotify;
-                        icon = this.icons.spotify;
-                    } break;
-                case constants.searchSources.deezer:
-                    {
-                        gaEvent = constants.ga.events.deezer;
-                        icon = this.icons.deezer;
-                    } break;
-            }
-
-            sendEvent(gaEvent);
-
-            return icon;
-        }
+        sendEvent(searchSourceEvent)
     }
 
     toggleOpacity = () => {
@@ -68,7 +51,7 @@ class DSPopover extends Component {
         $(".popover").css("opacity", this.opacity);
     }
 
-    changeTrack = (getNewIcon) => {
+    changeTrack = (getNewIcon: (selectedIcon: HTMLImageElement) => HTMLImageElement | null) => {
         const newIcon = getNewIcon(this.dsIcon);
 
         setupPopover(newIcon, this.settings);
@@ -80,12 +63,12 @@ class DSPopover extends Component {
                 <div className="discogs-searcher">
                     <div className="dropdown social-item">
                         <button className="social-item" data-bs-toggle="dropdown">
-                            <img src={this.getSearchSourceUrl()} />
+                            <img src={this.state.searchSourceIcon} />
                         </button>
                         <ul className="dropdown-menu">
-                            <li onClick={() => this.changeSearchSource(constants.searchSources.youTube)}><img src={this.icons.youTube} /></li>
-                            <li onClick={() => this.changeSearchSource(constants.searchSources.spotify)}><img src={this.icons.spotify} /></li>
-                            <li onClick={() => this.changeSearchSource(constants.searchSources.deezer)}><img src={this.icons.deezer} /></li>
+                            <li onClick={() => this.changeSearchSource(constants.searchSources.youTube, this.icons.youTube, constants.ga.events.youTube)}><img src={this.icons.youTube} /></li>
+                            <li onClick={() => this.changeSearchSource(constants.searchSources.spotify, this.icons.spotify, constants.ga.events.spotify)}><img src={this.icons.spotify} /></li>
+                            <li onClick={() => this.changeSearchSource(constants.searchSources.deezer, this.icons.deezer, constants.ga.events.deezer)}><img src={this.icons.deezer} /></li>
                         </ul>
                     </div>
                     <a className="social-item" target="_blank" href={this.settingsPage}><img className="settings-btn" src={this.icons.settings} /></a>
@@ -94,17 +77,17 @@ class DSPopover extends Component {
                     <button onClick={this.toggleOpacity} className="social-item"><img src={this.icons.eye} /></button>
                 </div>
                 <div style={{ maxHeight: constants.player.height }}>
-                    {this.state.defaultSearchSource == constants.searchSources.youTube &&
+                    {this.state.searchSource == constants.searchSources.youTube &&
                         <div>
                             <DSYouTube settings={this.settings} dsTitle={this.dsTitle} dsIcon={this.dsIcon} />
                         </div>
                     }
-                    {this.state.defaultSearchSource == constants.searchSources.spotify &&
+                    {this.state.searchSource == constants.searchSources.spotify &&
                         <div>
                             <DSSpotify dsTitle={this.dsTitle} />
                         </div>
                     }
-                    {this.state.defaultSearchSource == constants.searchSources.deezer &&
+                    {this.state.searchSource == constants.searchSources.deezer &&
                         <div>
                             <DSDeezer dsTitle={this.dsTitle} />
                         </div>

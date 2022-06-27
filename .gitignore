@@ -5,9 +5,4 @@ searcher.zip
 .env.prod
 .env.dev
 .vs
-package-lock.json
-src/js/*.js
-src/js/*.css
-src/js/*.txt
-src/dist
-*.map
+dist

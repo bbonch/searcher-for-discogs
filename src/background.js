@@ -1,5 +1,5 @@
 chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
+    function (request, _, sendResponse) {
         if (request.method == "getQueryResult") {
             var headers = {};
             if (request.contentType != undefined)
