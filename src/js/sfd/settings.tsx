@@ -40,7 +40,7 @@ class Settings extends React.Component<{}, DSSettings> {
         super(props);
 
         this.state = {
-            defaultSearchSource: constants.searchSources.youTube,
+            defaultSearchSource: constants.searchSources.youTube.value,
             autoPlayTrack: true,
             autoPlayRelease: true
         };
@@ -74,9 +74,9 @@ class Settings extends React.Component<{}, DSSettings> {
                 <Setting
                     type='radio'
                     name='defaultSearchSource'
-                    value={constants.searchSources.youTube}
+                    value={constants.searchSources.youTube.value}
                     title='YouTube'
-                    checked={this.state.defaultSearchSource == constants.searchSources.youTube}
+                    checked={this.state.defaultSearchSource == constants.searchSources.youTube.value}
                     onChange={this.settingChanged}
                 >
                     <Setting
@@ -97,17 +97,17 @@ class Settings extends React.Component<{}, DSSettings> {
                 <Setting
                     type='radio'
                     name='defaultSearchSource'
-                    value={constants.searchSources.spotify}
+                    value={constants.searchSources.spotify.value}
                     title='Spotify'
-                    checked={this.state.defaultSearchSource == constants.searchSources.spotify}
+                    checked={this.state.defaultSearchSource == constants.searchSources.spotify.value}
                     onChange={this.settingChanged}
                 />
                 <Setting
                     type='radio'
                     name='defaultSearchSource'
-                    value={constants.searchSources.deezer}
+                    value={constants.searchSources.deezer.value}
                     title='Deezer'
-                    checked={this.state.defaultSearchSource == constants.searchSources.deezer}
+                    checked={this.state.defaultSearchSource == constants.searchSources.deezer.value}
                     onChange={this.settingChanged}
                 />
             </div>

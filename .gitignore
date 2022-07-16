@@ -6,3 +6,4 @@ searcher.zip
 .env.dev
 .vs
 dist
+.vscode

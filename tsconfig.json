@@ -7,7 +7,9 @@
         "jsx": "react",
         "target": "es5",
         "allowJs": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node"
     },
     "include": [
         "./src/"

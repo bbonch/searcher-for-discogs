@@ -1,6 +1,5 @@
 import React, { createRef } from 'react'
-import { setupPopover } from '../services/popover-service'
-import { getNextIcon } from '../services/popover-service'
+import { setupPopover, getNextIcon } from '../services/popover-service'
 
 class DSYouTube extends React.Component<DSYouTubeProps> {
     settings: DSSettings
@@ -40,7 +39,7 @@ class DSYouTube extends React.Component<DSYouTubeProps> {
             type: "GET",
             method: "getQueryResult",
             referrer: window.location.origin
-        }, function (r) {
+        }, function (r: any) {
             if (r.success) {
                 const data = JSON.parse(r.result);
 

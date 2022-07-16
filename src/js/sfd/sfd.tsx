@@ -10,7 +10,7 @@ init()
 chrome.storage.sync.get(constants.storageKey, function (value: DSStorageSettings) {
     const settings: DSSettings =
     {
-        defaultSearchSource: constants.searchSources.youTube,
+        defaultSearchSource: constants.searchSources.youTube.value,
         autoPlayTrack: true,
         autoPlayRelease: true
     };

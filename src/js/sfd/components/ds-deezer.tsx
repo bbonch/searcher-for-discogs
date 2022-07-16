@@ -19,7 +19,7 @@ class DSDeezer extends React.Component<DSDeezerProps, DSDeezerState> {
             auth: `Bearer ${constants.deezer.auth}`,
             method: "getQueryResult",
             referrer: window.location.origin
-        }, function (r) {
+        }, function (r: any) {
             if (r.success) {
                 const result = JSON.parse(r.result);
                 if (result.data != undefined && result.data[0] != undefined)

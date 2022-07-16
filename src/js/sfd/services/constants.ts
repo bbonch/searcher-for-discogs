@@ -3,12 +3,22 @@ const constants: DSConstants = {
     classes: {
         dsIcon: "click-icon-ds",
         nextBtn: "next-btn",
-        prevBtn: "prev-btn"
+        prevBtn: "prev-btn",
+        ds: "discogs-searcher"
     },
     searchSources: {
-        youTube: 0,
-        spotify: 1,
-        deezer: 2
+        youTube: {
+            value: 0,
+            title: 'YouTube'
+        },
+        spotify: {
+            value: 1,
+            title: 'Spotify'
+        },
+        deezer: {
+            value: 2,
+            title: 'Deezer'
+        }
     },
     urls: {
         logo: "images/icon48.png",

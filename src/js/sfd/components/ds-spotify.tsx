@@ -21,7 +21,7 @@ class DSSpotify extends React.Component<DSSpotifyProps, DSSpotifyState> {
             data: 'grant_type=client_credentials',
             method: "getQueryResult",
             referrer: window.location.origin
-        }, function (r) {
+        }, function (r: any) {
             if (r.success) {
                 const result = JSON.parse(r.result)
                 if (result != undefined && result.access_token != undefined) {
@@ -33,15 +33,10 @@ class DSSpotify extends React.Component<DSSpotifyProps, DSSpotifyState> {
                     }, function (r) {
                         if (r.success) {
                             if (r.result != undefined) {
-                                var uri = "";
                                 try {
-                                    uri = JSON.parse(r.result).tracks.items[0].uri;
-                                } catch (e) {
-                                }
-
-                                if (uri != "") {
+                                    const uri = JSON.parse(r.result).tracks.items[0].uri;
                                     $this.setState({ src: constants.spotify.api.embed.replace("{uri}", uri) });
-                                }
+                                } catch (e) { }
                             }
                         } else {
                             console.log(r.error);

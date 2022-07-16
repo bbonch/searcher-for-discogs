@@ -23,6 +23,7 @@ function setupPopover(dsIcon: HTMLImageElement | null, settings: DSSettings) {
     sendDimension(constants.ga.dimensions.dimension5, trackInfo.track);
 
     const popover = Popover.getInstance(dsIcon);
+    debugger
     if (popover != null) {
         popover.toggle();
     } else {
@@ -46,11 +47,11 @@ function getPrevIcon(selectedIcon: HTMLImageElement) {
 
 function getSearchSourceIcon(searchSource: number): string {
     switch (searchSource) {
-        case constants.searchSources.youTube:
+        case constants.searchSources.youTube.value:
             return chrome.runtime.getURL(constants.urls.youTube);
-        case constants.searchSources.spotify:
+        case constants.searchSources.spotify.value:
             return chrome.runtime.getURL(constants.urls.spotify);
-        case constants.searchSources.deezer:
+        case constants.searchSources.deezer.value:
             return chrome.runtime.getURL(constants.urls.deezer);
     }
 

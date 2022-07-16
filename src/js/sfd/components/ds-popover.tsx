@@ -37,13 +37,13 @@ class DSPopover extends React.Component<DSPopoverProps, DSPopoverState> {
         this.opacity = 1
     }
 
-    changeSearchSource = (searchSource: number, searchSourceIcon: string, searchSourceEvent: string) => {
+    changeSearchSource = (searchSource: SearchSource, searchSourceIcon: string) => {
         this.setState({
-            searchSource: searchSource,
+            searchSource: searchSource.value,
             searchSourceIcon: searchSourceIcon
         })
 
-        sendEvent(searchSourceEvent)
+        sendEvent(searchSource.title)
     }
 
     toggleOpacity = () => {
@@ -60,15 +60,15 @@ class DSPopover extends React.Component<DSPopoverProps, DSPopoverState> {
     render() {
         return (
             <>
-                <div className="discogs-searcher">
+                <div className={constants.classes.ds}>
                     <div className="dropdown social-item">
                         <button className="social-item" data-bs-toggle="dropdown">
                             <img src={this.state.searchSourceIcon} />
                         </button>
                         <ul className="dropdown-menu">
-                            <li onClick={() => this.changeSearchSource(constants.searchSources.youTube, this.icons.youTube, constants.ga.events.youTube)}><img src={this.icons.youTube} /></li>
-                            <li onClick={() => this.changeSearchSource(constants.searchSources.spotify, this.icons.spotify, constants.ga.events.spotify)}><img src={this.icons.spotify} /></li>
-                            <li onClick={() => this.changeSearchSource(constants.searchSources.deezer, this.icons.deezer, constants.ga.events.deezer)}><img src={this.icons.deezer} /></li>
+                            <li onClick={() => this.changeSearchSource(constants.searchSources.youTube, this.icons.youTube)}><img alt={constants.searchSources.youTube.title} src={this.icons.youTube} /></li>
+                            <li onClick={() => this.changeSearchSource(constants.searchSources.spotify, this.icons.spotify)}><img alt={constants.searchSources.spotify.title} src={this.icons.spotify} /></li>
+                            <li onClick={() => this.changeSearchSource(constants.searchSources.deezer, this.icons.deezer)}><img alt={constants.searchSources.deezer.title} src={this.icons.deezer} /></li>
                         </ul>
                     </div>
                     <a className="social-item" target="_blank" href={this.settingsPage}><img className="settings-btn" src={this.icons.settings} /></a>
@@ -77,17 +77,17 @@ class DSPopover extends React.Component<DSPopoverProps, DSPopoverState> {
                     <button onClick={this.toggleOpacity} className="social-item"><img src={this.icons.eye} /></button>
                 </div>
                 <div style={{ maxHeight: constants.player.height }}>
-                    {this.state.searchSource == constants.searchSources.youTube &&
+                    {this.state.searchSource == constants.searchSources.youTube.value &&
                         <div>
                             <DSYouTube settings={this.settings} dsTitle={this.dsTitle} dsIcon={this.dsIcon} />
                         </div>
                     }
-                    {this.state.searchSource == constants.searchSources.spotify &&
+                    {this.state.searchSource == constants.searchSources.spotify.value &&
                         <div>
                             <DSSpotify dsTitle={this.dsTitle} />
                         </div>
                     }
-                    {this.state.searchSource == constants.searchSources.deezer &&
+                    {this.state.searchSource == constants.searchSources.deezer.value &&
                         <div>
                             <DSDeezer dsTitle={this.dsTitle} />
                         </div>

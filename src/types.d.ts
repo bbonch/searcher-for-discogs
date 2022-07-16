@@ -76,17 +76,23 @@ interface DSStorageSettings {
     settings: string | null
 }
 
+interface SearchSource {
+    value: number,
+    title: string
+}
+
 interface DSConstants {
     storageKey: string;
     classes: {
         dsIcon: string;
         nextBtn: string;
         prevBtn: string;
+        ds: string;
     };
     searchSources: {
-        youTube: number;
-        spotify: number;
-        deezer: number;
+        youTube: SearchSource;
+        spotify: SearchSource;
+        deezer: SearchSource;
     };
     urls: {
         logo: string;
