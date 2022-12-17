@@ -1,11 +1,11 @@
-import { sendEvent, sendDimension } from './analytics-service'
+import { sendEvent, sendDimension } from './useAnalytics'
 import { Popover } from 'bootstrap'
-import options from './options';
+import options from '../utils/options';
 import DSPopover from '../components/ds-popover'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 
-function setupPopover(dsIcon: HTMLImageElement | null, settings: DSSettings) {
+export const setupPopover = (dsIcon: HTMLImageElement | null, settings: DSSettings) => {
     if (dsIcon == null) {
         hideAllPopovers(dsIcon);
 
@@ -33,19 +33,19 @@ function setupPopover(dsIcon: HTMLImageElement | null, settings: DSSettings) {
     hideAllPopovers(dsIcon);
 }
 
-function getNextIcon(selectedIcon: HTMLImageElement) {
+export const getNextIcon = (selectedIcon: HTMLImageElement) => {
     const nextIcon = getNewIcon(selectedIcon, (parent) => parent.next())
 
     return nextIcon;
 }
 
-function getPrevIcon(selectedIcon: HTMLImageElement) {
+export const getPrevIcon = (selectedIcon: HTMLImageElement) => {
     const prevIcon = getNewIcon(selectedIcon, (parent) => parent.prev())
 
     return prevIcon;
 }
 
-function getSearchSourceIcon(searchSource: number): string {
+export const getSearchSourceIcon = (searchSource: number): string => {
     switch (searchSource) {
         case constants.searchSources.youTube.value:
             return chrome.runtime.getURL(constants.urls.youTube);
@@ -58,7 +58,7 @@ function getSearchSourceIcon(searchSource: number): string {
     return ''
 }
 
-function getNewIcon(selectedIcon: HTMLImageElement, newF: (parent: JQuery<HTMLElement>) => JQuery<HTMLElement>): HTMLImageElement | null {
+const getNewIcon = (selectedIcon: HTMLImageElement, newF: (parent: JQuery<HTMLElement>) => JQuery<HTMLElement>): HTMLImageElement | null => {
     const selectedTrack = options.getTrack(selectedIcon);
     let parent = $(selectedTrack).parent();
     let newTrack = newF(parent).find(options.trackTitle).get(0);
@@ -79,7 +79,7 @@ function getNewIcon(selectedIcon: HTMLImageElement, newF: (parent: JQuery<HTMLEl
     return newIcon as HTMLImageElement;
 }
 
-function showPopover(dsIcon: HTMLImageElement, settings: DSSettings, title: string) {
+const showPopover = (dsIcon: HTMLImageElement, settings: DSSettings, title: string) => {
     const content = document.createElement("div");
     const popover = new Popover(dsIcon, {
         content: content,
@@ -93,7 +93,7 @@ function showPopover(dsIcon: HTMLImageElement, settings: DSSettings, title: stri
     popoverRoot.render(<DSPopover dsIcon={dsIcon} settings={settings} dsTitle={title} />);
 }
 
-function updateTrackStyle(dsIcon: HTMLImageElement) {
+const updateTrackStyle = (dsIcon: HTMLImageElement) => {
     const track = options.getTrack(dsIcon);
     const selectedTrack = $(`${options.trackTitle}.track-selected`);
     if (track.get(0) == selectedTrack.get(0))
@@ -103,7 +103,7 @@ function updateTrackStyle(dsIcon: HTMLImageElement) {
     track.removeClass('track-visited').addClass('track-selected');
 }
 
-function getTrackInfo(dsIcon: HTMLImageElement): DSTrackInfo {
+const getTrackInfo = (dsIcon: HTMLImageElement): DSTrackInfo => {
     const trackElement = options.getTrack(dsIcon);
     const track = options.getTrackName(trackElement);
     const artist = options.getArtistName(dsIcon);
@@ -118,7 +118,7 @@ function getTrackInfo(dsIcon: HTMLImageElement): DSTrackInfo {
     }
 }
 
-function hideAllPopovers(dsIcon: HTMLImageElement | null) {
+const hideAllPopovers = (dsIcon: HTMLImageElement | null) => {
     $(`.${constants.classes.dsIcon}`).each((_, element) => {
         if (element == dsIcon)
             return;
@@ -129,5 +129,3 @@ function hideAllPopovers(dsIcon: HTMLImageElement | null) {
         }
     });
 }
-
-export { setupPopover, getNextIcon, getPrevIcon, getSearchSourceIcon }

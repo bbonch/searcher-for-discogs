@@ -12,6 +12,10 @@ type SettingProps = React.PropsWithChildren<{
     onChange: (name: string, value: number | boolean | null) => void
 }>
 
+type SettingsProps = {
+    settings: DSSettings
+}
+
 type DSIconProps = {
     settings: DSSettings
 }
@@ -20,11 +24,6 @@ type DSPopoverProps = {
     settings: DSSettings,
     dsIcon: HTMLImageElement,
     dsTitle: string
-}
-
-type DSPopoverState = {
-    searchSource: number,
-    searchSourceIcon: string
 }
 
 type DSYouTubeProps = {
@@ -37,16 +36,8 @@ type DSSpotifyProps = {
     dsTitle: string
 }
 
-type DSSpotifyState = {
-    src: string
-}
-
 type DSDeezerProps = {
     dsTitle: string
-}
-
-type DSDeezerState = {
-    src: string
 }
 
 interface DSTrackInfo {

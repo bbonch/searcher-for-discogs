@@ -53,7 +53,7 @@ var config = {
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
-            constants: [path.resolve(__dirname, "./src/js/sfd/services/constants.ts"), 'default']
+            constants: [path.resolve(__dirname, "./src/js/sfd/utils/constants.ts"), 'default']
         })
     ],
     resolve: {

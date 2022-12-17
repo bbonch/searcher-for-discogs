@@ -1,41 +1,26 @@
-import React, { createRef } from 'react'
-import { setupPopover, getNextIcon } from '../services/popover-service'
+import React, { useEffect, useRef } from 'react'
+import { setupPopover, getNextIcon } from '../hooks/usePopover'
 
-class DSYouTube extends React.Component<DSYouTubeProps> {
-    settings: DSSettings
-    dsIcon: HTMLImageElement
-    dsTitle: string
-    youTubeRef: React.RefObject<HTMLDivElement>
+const DSYouTube: (props: DSYouTubeProps) => JSX.Element = ({ settings, dsIcon, dsTitle }) => {
+    const youTubeRef: React.RefObject<HTMLDivElement> = useRef(null)
 
-    constructor(props: DSYouTubeProps) {
-        super(props)
-
-        this.settings = props.settings
-        this.dsIcon = props.dsIcon
-        this.dsTitle = props.dsTitle
-
-        this.youTubeRef = createRef()
+    const onPlayerReady = (e) => {
+        if (settings.autoPlayTrack)
+            e.target.playVideo();
     }
 
-    onPlayerReady = (event) => {
-        if (this.settings.autoPlayTrack)
-            event.target.playVideo();
-    }
+    const onPlayerStateChange = (e) => {
+        if (e.data == 0) {
+            if (!settings.autoPlayRelease) return;
 
-    onPlayerStateChange = (event) => {
-        if (event.data == 0) {
-            if (!this.settings.autoPlayRelease) return;
-
-            var nextIcon = getNextIcon(this.dsIcon)
-
-            setupPopover(nextIcon, this.settings);
+            var nextIcon = getNextIcon(dsIcon)
+            setupPopover(nextIcon, settings);
         }
     }
 
-    loadVideo = () => {
-        const $this = this;
+    useEffect(() => {
         chrome.runtime.sendMessage({
-            url: constants.youTube.api.replace("{q}", $this.dsTitle).replace("{key}", constants.youTube.key),
+            url: constants.youTube.api.replace("{q}", dsTitle).replace("{key}", constants.youTube.key),
             type: "GET",
             method: "getQueryResult",
             referrer: window.location.origin
@@ -53,13 +38,13 @@ class DSYouTube extends React.Component<DSYouTubeProps> {
                 } catch (e) { }
 
                 if (videoId != null) {
-                    new YT.Player($this.youTubeRef.current, {
+                    new YT.Player(youTubeRef.current, {
                         height: constants.player.height,
                         width: constants.player.width,
                         videoId: videoId,
                         events: {
-                            'onReady': $this.onPlayerReady,
-                            'onStateChange': $this.onPlayerStateChange
+                            'onReady': onPlayerReady,
+                            'onStateChange': onPlayerStateChange
                         }
                     });
                 }
@@ -67,17 +52,9 @@ class DSYouTube extends React.Component<DSYouTubeProps> {
                 console.log(r.error);
             }
         });
-    }
+    }, [dsTitle])
 
-    componentDidMount() {
-        this.loadVideo();
-    }
-
-    render() {
-        return (
-            <div ref={this.youTubeRef}></div>
-        )
-    }
+    return <div ref={youTubeRef}></div>
 }
 
 export default DSYouTube

@@ -1,18 +1,9 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 
-class DSSpotify extends React.Component<DSSpotifyProps, DSSpotifyState> {
-    dsTitle: string
+const DSSpotify: (props: DSSpotifyProps) => JSX.Element = ({ dsTitle }) => {
+    const [src, setSrc] = useState('')
 
-    constructor(props: DSSpotifyProps) {
-        super(props)
-
-        this.dsTitle = props.dsTitle
-
-        this.state = { src: '' }
-    }
-
-    loadVideo = () => {
-        const $this = this;
+    useEffect(() => {
         chrome.runtime.sendMessage({
             url: constants.spotify.api.token,
             type: "POST",
@@ -26,7 +17,7 @@ class DSSpotify extends React.Component<DSSpotifyProps, DSSpotifyState> {
                 const result = JSON.parse(r.result)
                 if (result != undefined && result.access_token != undefined) {
                     chrome.runtime.sendMessage({
-                        url: constants.spotify.api.search.replace("{q}", $this.dsTitle),
+                        url: constants.spotify.api.search.replace("{q}", dsTitle),
                         type: "GET",
                         auth: "Bearer " + result.access_token,
                         method: "getQueryResult"
@@ -35,7 +26,7 @@ class DSSpotify extends React.Component<DSSpotifyProps, DSSpotifyState> {
                             if (r.result != undefined) {
                                 try {
                                     const uri = JSON.parse(r.result).tracks.items[0].uri;
-                                    $this.setState({ src: constants.spotify.api.embed.replace("{uri}", uri) });
+                                    setSrc(constants.spotify.api.embed.replace("{uri}", uri));
                                 } catch (e) { }
                             }
                         } else {
@@ -45,17 +36,9 @@ class DSSpotify extends React.Component<DSSpotifyProps, DSSpotifyState> {
                 }
             }
         });
-    }
+    }, [dsTitle])
 
-    componentDidMount() {
-        this.loadVideo();
-    }
-
-    render() {
-        return (
-            <iframe src={this.state.src} height={constants.player.height} width={constants.player.width} frameBorder="0"></iframe>
-        )
-    }
+    return <iframe src={src} height={constants.player.height} width={constants.player.width}></iframe>
 }
 
 export default DSSpotify

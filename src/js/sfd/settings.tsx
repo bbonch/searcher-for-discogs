@@ -1,120 +1,94 @@
 ﻿import { createRoot } from 'react-dom/client';
-import React from 'react'
+import React, { useState } from 'react'
 import '../../css/settings.scss'
+import { getSettings } from './hooks/useChromeStorage';
 
-class Setting extends React.Component<SettingProps> {
-    constructor(props: SettingProps) {
-        super(props);
-    }
+const Setting: (props: SettingProps) => JSX.Element = ({ name, type, onChange, checked, title, value, children }) => {
+    return <div className={'setting setting-' + type}>
+        <input
+            type={type}
+            name={name}
+            value={value}
+            onChange={(event) => {
+                let changedValue: number | boolean | null = null;
+                if (type == 'radio') {
+                    changedValue = parseInt(event.target.value);
+                } else if (type == 'checkbox') {
+                    changedValue = event.target.checked;
+                }
 
-    onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let changedValue: number | boolean | null = null;
-        if (this.props.type == 'radio') {
-            changedValue = parseInt(event.target.value);
-        } else if (this.props.type == 'checkbox') {
-            changedValue = event.target.checked;
-        }
-
-        this.props.onChange(this.props.name, changedValue);
-    }
-
-    render() {
-        return (
-            <div className={'setting setting-' + this.props.type}>
-                <input
-                    type={this.props.type}
-                    name={this.props.name}
-                    value={this.props.value}
-                    onChange={this.onChange}
-                    checked={this.props.checked}
-                />
-                <span>{this.props.title}</span>
-                <div className='setting-children'>{this.props.children}</div>
-            </div>
-        );
-    }
+                onChange(name, changedValue);
+            }}
+            checked={checked}
+        />
+        <span>{title}</span>
+        <div className='setting-children'>{children}</div>
+    </div>
 }
 
-class Settings extends React.Component<{}, DSSettings> {
-    constructor(props: {}) {
-        super(props);
+const Settings: (props: SettingsProps) => JSX.Element = (props) => {
+    const [settings, setSettings] = useState<DSSettings>(props.settings)
 
-        this.state = {
-            defaultSearchSource: constants.searchSources.youTube.value,
-            autoPlayTrack: true,
-            autoPlayRelease: true
-        };
-
-        const $this = this;
-        chrome.storage.sync.get(constants.storageKey, function (value: DSStorageSettings) {
-            if (value.settings == null || value.settings == "") {
-                chrome.storage.sync.set({ [constants.storageKey]: JSON.stringify($this.state) });
-            } else {
-                const stateCopy = Object.assign($this.state, JSON.parse(value.settings));
-                $this.setState(stateCopy);
-            }
-        });
-    }
-
-    settingChanged = (name: string, value: number | boolean | null) => {
+    const settingChanged = (name: string, value: number | boolean | null) => {
         if (value == null)
             return;
-            
-        const stateCopy: DSSettings = Object.assign({}, this.state);
-        stateCopy[name] = value;
-        this.setState(stateCopy, function () {
-            chrome.storage.sync.set({ [constants.storageKey]: JSON.stringify(this.state) });
-        });
+
+        const settingsCopy = {
+            ...settings,
+            [name]: value
+        };
+        setSettings(settingsCopy);
+        chrome.storage.sync.set({ [constants.storageKey]: JSON.stringify(settingsCopy) });
     }
 
-    render() {
-        return (
-            <div className='settings'>
-                <div className='settings-title'>Default search source</div>
-                <Setting
-                    type='radio'
-                    name='defaultSearchSource'
-                    value={constants.searchSources.youTube.value}
-                    title='YouTube'
-                    checked={this.state.defaultSearchSource == constants.searchSources.youTube.value}
-                    onChange={this.settingChanged}
-                >
-                    <Setting
-                        type='checkbox'
-                        name='autoPlayTrack'
-                        title='Autoplay track'
-                        checked={this.state.autoPlayTrack}
-                        onChange={this.settingChanged}
-                    />
-                    <Setting
-                        type='checkbox'
-                        name='autoPlayRelease'
-                        title='Autoplay release'
-                        checked={this.state.autoPlayRelease}
-                        onChange={this.settingChanged}
-                    />
-                </Setting>
-                <Setting
-                    type='radio'
-                    name='defaultSearchSource'
-                    value={constants.searchSources.spotify.value}
-                    title='Spotify'
-                    checked={this.state.defaultSearchSource == constants.searchSources.spotify.value}
-                    onChange={this.settingChanged}
-                />
-                <Setting
-                    type='radio'
-                    name='defaultSearchSource'
-                    value={constants.searchSources.deezer.value}
-                    title='Deezer'
-                    checked={this.state.defaultSearchSource == constants.searchSources.deezer.value}
-                    onChange={this.settingChanged}
-                />
-            </div>
-        );
-    }
+    return <div className='settings'>
+        <div className='settings-title'>Default search source</div>
+        <Setting
+            type='radio'
+            name='defaultSearchSource'
+            value={constants.searchSources.youTube.value}
+            title='YouTube'
+            checked={settings.defaultSearchSource == constants.searchSources.youTube.value}
+            onChange={settingChanged}
+        >
+            <Setting
+                type='checkbox'
+                name='autoPlayTrack'
+                title='Autoplay track'
+                checked={settings.autoPlayTrack}
+                onChange={settingChanged}
+            />
+            <Setting
+                type='checkbox'
+                name='autoPlayRelease'
+                title='Autoplay release'
+                checked={settings.autoPlayRelease}
+                onChange={settingChanged}
+            />
+        </Setting>
+        <Setting
+            type='radio'
+            name='defaultSearchSource'
+            value={constants.searchSources.spotify.value}
+            title='Spotify'
+            checked={settings.defaultSearchSource == constants.searchSources.spotify.value}
+            onChange={settingChanged}
+        />
+        <Setting
+            type='radio'
+            name='defaultSearchSource'
+            value={constants.searchSources.deezer.value}
+            title='Deezer'
+            checked={settings.defaultSearchSource == constants.searchSources.deezer.value}
+            onChange={settingChanged}
+        />
+    </div>;
 }
 
-const settingsElement = document.getElementById('settings') as HTMLElement
-const root = createRoot(settingsElement)
-root.render(<Settings />)
+chrome.storage.sync.get(constants.storageKey, function (value: DSStorageSettings) {
+    const settings = getSettings(value)
+
+    const settingsElement = document.getElementById('settings') as HTMLElement
+    const root = createRoot(settingsElement)
+    root.render(<Settings settings={settings} />)
+});

@@ -2,7 +2,7 @@ import '@testing-library/jest-dom'
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import DSIcon from '../src/js/sfd/components/ds-icon'
-import constants from '../src/js/sfd/services/constants'
+import constants from '../src/js/sfd/utils/constants'
 import '../src/types'
 import $ from 'jquery';
 

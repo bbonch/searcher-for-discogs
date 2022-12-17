@@ -1,31 +1,16 @@
-import options from './services/options'
+import options from './utils/options'
 import DSIcon from './components/ds-icon'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { init } from './services/analytics-service'
+import { init } from './hooks/useAnalytics'
 import '../../css/styles.scss'
+import { getSettings } from './hooks/useChromeStorage'
 
 init()
 
 chrome.storage.sync.get(constants.storageKey, function (value: DSStorageSettings) {
-    const settings: DSSettings =
-    {
-        defaultSearchSource: constants.searchSources.youTube.value,
-        autoPlayTrack: true,
-        autoPlayRelease: true
-    };
-
-    if (value.settings == null || value.settings == "") {
-        chrome.storage.sync.set({ [constants.storageKey]: JSON.stringify(settings) });
-    } else {
-        const parsedSettings = JSON.parse(value.settings);
-        if (!Number.isInteger(parsedSettings.defaultSearchSource)) {
-            parsedSettings.defaultSearchSource = parseInt(parsedSettings.defaultSearchSource);
-        }
-
-        Object.assign(settings, parsedSettings);
-    }
-
+    const settings = getSettings(value)
+    
     $(options.trackTitle).each((_, element) => {
         const iconDS = document.createElement("span");
 

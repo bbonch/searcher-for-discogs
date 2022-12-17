@@ -1,20 +1,10 @@
 import React from 'react'
-import { setupPopover } from '../services/popover-service'
+import { setupPopover } from '../hooks/usePopover'
 
-class DSIcon extends React.Component<DSIconProps> {
-    private logoUrl: string;
+const DSIcon: (props: DSIconProps) => JSX.Element = ({ settings }) => {
+    const logoUrl = chrome.runtime.getURL(constants.urls.logo) as string
 
-    constructor(props: DSIconProps) {
-        super(props)
-
-        this.logoUrl = chrome.runtime.getURL(constants.urls.logo)
-    }
-
-    render() {
-        return (
-            <img className={constants.classes.dsIcon} onClick={(e) => setupPopover(e.currentTarget, this.props.settings)} src={this.logoUrl} />
-        )
-    }
+    return <img className={constants.classes.dsIcon} onClick={(e) => setupPopover(e.currentTarget, settings)} src={logoUrl} />
 }
 
 export default DSIcon
