@@ -21,7 +21,7 @@
       ],
       "js": [
         "libs/yt.js",
-        "libs/ga.js",
+        "libs/gtag.js",
         "dist/load-cs.js"
       ]
     }

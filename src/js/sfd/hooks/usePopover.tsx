@@ -16,17 +16,16 @@ export const setupPopover = (dsIcon: HTMLImageElement | null, settings: DSSettin
 
     const trackInfo = getTrackInfo(dsIcon);
 
-    sendEvent(constants.ga.events.clicked);
-    sendDimension(constants.ga.dimensions.dimension2, trackInfo.artist);
-    if (trackInfo.style != null)
-        sendDimension(constants.ga.dimensions.dimension4, trackInfo.style);
-    sendDimension(constants.ga.dimensions.dimension5, trackInfo.track);
-
     const popover = Popover.getInstance(dsIcon);
-    debugger
     if (popover != null) {
         popover.toggle();
     } else {
+        sendEvent(constants.ga.events.clicked);
+        sendDimension(constants.ga.dimensions.artist, trackInfo.artist);
+        if (trackInfo.style != null)
+            sendDimension(constants.ga.dimensions.style, trackInfo.style);
+        sendDimension(constants.ga.dimensions.track, trackInfo.track);
+
         showPopover(dsIcon, settings, trackInfo.title);
     }
 

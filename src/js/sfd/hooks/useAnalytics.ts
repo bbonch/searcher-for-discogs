@@ -1,11 +1,22 @@
+let gtag: Gtag.Gtag = () => { }
+
 export const init = () => {
-    ga('create', constants.ga.id, 'auto', { 'name': constants.ga.name });
+    window.dataLayer = window.dataLayer || [];
+    gtag = function () { window.dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', constants.ga.id, {
+        'custom_map': {
+            'dimension1': 'artist',
+            'dimension2': 'style',
+            'dimension3': 'track'
+        }
+    });
 }
 
 export const sendEvent = (event: string) => {
-    ga(`${constants.ga.name}.send`, 'event', document.URL, event);
+    gtag('event', event)
 }
 
 export const sendDimension = (dimension: string, value: string) => {
-    ga(`${constants.ga.name}.set`, dimension, value);
+    gtag('event', `${dimension}_dimension`, { [dimension]: value })
 }

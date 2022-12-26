@@ -1,7 +1,7 @@
 declare var chrome: any
 declare var constants: DSConstants
-declare var ga: any
 declare var YT: any
+declare var dataLayer: any
 
 type SettingProps = React.PropsWithChildren<{
     type: string,
@@ -100,7 +100,6 @@ interface DSConstants {
     };
     ga: {
         id: string;
-        name: string;
         events: {
             youTube: string;
             spotify: string;
@@ -108,9 +107,9 @@ interface DSConstants {
             clicked: string;
         };
         dimensions: {
-            dimension2: string;
-            dimension4: string;
-            dimension5: string;
+            artist: string;
+            style: string;
+            track: string;
         }
     };
     youTube: {

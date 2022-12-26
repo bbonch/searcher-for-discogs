@@ -34,8 +34,7 @@ const constants: DSConstants = {
         settings: "html/settings.html"
     },
     ga: {
-        id: "UA-50788406-1",
-        name: "discogsSearcher",
+        id: "G-QMTSXB31YG",
         events: {
             youTube: "YouTube",
             spotify: "Spotify",
@@ -43,9 +42,9 @@ const constants: DSConstants = {
             clicked: "clicked"
         },
         dimensions: {
-            dimension2: "dimension2",
-            dimension4: "dimension4",
-            dimension5: "dimension5"
+            artist: "artist",
+            style: "style",
+            track: "track"
         }
     },
     youTube: {
