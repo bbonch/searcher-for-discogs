@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from 'react'
-import { setupPopover, getNextIcon } from '../hooks/usePopover'
+import usePopover from '../hooks/usePopover'
 
 const DSYouTube: (props: DSYouTubeProps) => JSX.Element = ({ settings, dsIcon, dsTitle }) => {
     const youTubeRef: React.RefObject<HTMLDivElement> = useRef(null)
+
+    const { setupPopover, getNextIcon } = usePopover()
 
     const onPlayerReady = (e) => {
         if (settings.autoPlayTrack)

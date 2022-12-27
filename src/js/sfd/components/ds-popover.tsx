@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import DSYouTube from './ds-youtube'
 import DSSpotify from './ds-spotify'
 import DSDeezer from './ds-deezer'
-import { sendEvent } from '../hooks/useAnalytics'
-import { setupPopover, getNextIcon, getPrevIcon, getSearchSourceIcon } from '../hooks/usePopover'
+import { sendEvent } from '../utils/analytics'
+import usePopover from '../hooks/usePopover'
 
 const DSPopover: (props: DSPopoverProps) => JSX.Element = ({ settings, dsIcon, dsTitle }) => {
     const icons: { eye: string; youTube: string; spotify: string; deezer: string; settings: string; prev: string; next: string } = {
@@ -15,8 +15,10 @@ const DSPopover: (props: DSPopoverProps) => JSX.Element = ({ settings, dsIcon, d
         prev: chrome.runtime.getURL(constants.urls.prev),
         next: chrome.runtime.getURL(constants.urls.next)
     }
-    const settingsPage: string = chrome.runtime.getURL(constants.pages.settings)    
+    const settingsPage: string = chrome.runtime.getURL(constants.pages.settings)
     let opacity: number = 1
+
+    const { setupPopover, getNextIcon, getPrevIcon, getSearchSourceIcon } = usePopover()
 
     const [searchSource, setSearchSource] = useState(settings.defaultSearchSource)
     const searchSourceIcon = getSearchSourceIcon(searchSource)

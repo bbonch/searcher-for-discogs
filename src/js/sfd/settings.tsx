@@ -1,7 +1,7 @@
 ﻿import { createRoot } from 'react-dom/client';
 import React, { useState } from 'react'
 import '../../css/settings.scss'
-import { getSettings } from './hooks/useChromeStorage';
+import { getSettings } from './utils/chromeStorage';
 
 const Setting: (props: SettingProps) => JSX.Element = ({ name, type, onChange, checked, title, value, children }) => {
     return <div className={'setting setting-' + type}>
