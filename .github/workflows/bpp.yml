@@ -26,6 +26,6 @@ jobs:
     - run: npm run release-webpack
     
     - name: Browser Platform Publish
-    - uses: PlasmoHQ/bpp@v3
+      uses: PlasmoHQ/bpp@v3
       with:
         keys: ${{ secrets.BPP_KEYS }}
