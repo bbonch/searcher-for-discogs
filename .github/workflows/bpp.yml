@@ -22,8 +22,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
-    - run: npm run release-webpack
+    - run: yarn install
+    - run: yarn release-webpack
     
     - name: Browser Platform Publish
       uses: PlasmoHQ/bpp@v3
