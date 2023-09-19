@@ -11,7 +11,7 @@ Allows to listen to tracks on Discogs by clicking on small icon next to track ti
 Install extension directly from [Chrome Web Store](https://chrome.google.com/webstore/detail/searcher-for-discogs/kfaklaicipagejpdmnefheakeoikempa)
 
 #### YouTube quota usage
-There is a limit of **80000** clicks for YouTube player per day per **all** users (*It is likely that at the end of day YouTube player stops working because of quota*)
+There is a limit of **10000** clicks for YouTube player per day per **all** users (*It is likely that at the end of day YouTube player stops working because of quota*)
 
 ### Build locally
 - Clone repository with `git clone https://github.com/bbonch/searcher-for-discogs.git` or download zip
