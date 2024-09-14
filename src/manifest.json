@@ -22,7 +22,7 @@
       "js": [
         "libs/yt.js",
         "libs/gtag.js",
-        "dist/load-cs.js"
+        "dist/sfd.js"
       ]
     }
   ],

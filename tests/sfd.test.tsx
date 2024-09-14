@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom'
 import React from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import DSIcon from '../src/js/sfd/components/ds-icon'
 import constants from '../src/js/sfd/utils/constants'
 import '../src/types'
@@ -67,18 +67,20 @@ describe('ds-popover component works', () => {
     })
   })
 
-  it('ds-popover component opens', () => {
+  it('ds-popover component opens', async () => {
     const dsIcon = screen.getByRole('img')
     expect(dsIcon).toBeDefined()
 
     fireEvent.click(dsIcon)
 
-    const dsPopover = screen.getByRole('tooltip')
+    const dsPopover = await screen.findByRole('tooltip')
     expect(dsPopover).toBeDefined()
   })
 
-  it('ds-youtube component opens', () => {
+  it('ds-spotify component opens', async () => {
     fireEvent.click(screen.getByRole('img'))
+
+    await screen.findByRole('tooltip')
 
     const sourceChangeBtn = document.querySelector('[data-bs-toggle]')
     expect(sourceChangeBtn).toBeDefined()
@@ -97,8 +99,10 @@ describe('ds-popover component works', () => {
     expect(iframe).toBeDefined()
   })
 
-  it('ds-deezer component opens', () => {
+  it('ds-deezer component opens', async () => {
     fireEvent.click(screen.getByRole('img'))
+
+    await screen.findByRole('tooltip')
 
     const sourceChangeBtn = document.querySelector('[data-bs-toggle]')
     fireEvent.click(sourceChangeBtn as Element)
@@ -117,11 +121,11 @@ describe('ds-popover component works', () => {
 
     fireEvent.click(dsicon)
 
-    const dsPopover = screen.getByRole('tooltip')
+    const dsPopover = await screen.findByRole('tooltip')
     expect(dsPopover).toHaveClass('show')
 
     fireEvent.click(dsicon)
 
-    expect(dsPopover).not.toHaveClass('show')
+    await waitFor(() => expect(dsPopover).not.toHaveClass('show'))
   })
 })

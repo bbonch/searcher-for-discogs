@@ -87,8 +87,8 @@ export default function usePopover() {
             trigger: "manual",
             html: true
         });
-        popover.show();
-
+        popover.toggle();
+        
         const popoverRoot = createRoot(content);
         popoverRoot.render(<DSPopover dsIcon={dsIcon} settings={settings} dsTitle={title} />);
     }
