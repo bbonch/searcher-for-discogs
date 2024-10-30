@@ -2,7 +2,8 @@ export const getSettings = (value: DSStorageSettings) => {
     const settings: DSSettings = {
         defaultSearchSource: constants.searchSources.youTube.value,
         autoPlayTrack: true,
-        autoPlayRelease: true
+        autoPlayRelease: true,
+        apiToken: constants.youTube.key
     }
 
     if (value.settings == null || value.settings == "") {
