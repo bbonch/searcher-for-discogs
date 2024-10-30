@@ -10,7 +10,8 @@ const testSrc = 'some-src'
 const settings: DSSettings = {
   defaultSearchSource: constants.searchSources.youTube.value,
   autoPlayRelease: true,
-  autoPlayTrack: true
+  autoPlayTrack: true,
+  apiToken: null
 }
 
 beforeAll(() => {
