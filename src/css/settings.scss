@@ -17,4 +17,45 @@
             padding-left: 15px;
         }
     }
+    
+
+    .settings-api-wrapper {
+        margin-top: 30px;
+
+        display: flex;
+        flex-direction: column;
+
+        .api-token {
+            margin-top: 10px;
+            width: 350px;
+        }
+
+        details {
+            margin-top: 10px;
+            width: fit-content;
+
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            padding: 0.5em 0.5em 0;
+
+            font-size: 1.2em;
+        }
+          
+        summary {
+            margin: -0.5em -0.5em 0;
+            padding: 0.5em;
+
+            cursor: pointer;
+        }
+          
+        details[open] {
+            padding: 0.5em;
+        }
+          
+        details[open] summary {
+            border-bottom: 1px solid #aaa;
+            margin-bottom: 0.5em;
+        }
+          
+    }
 }

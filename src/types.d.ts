@@ -61,6 +61,7 @@ interface DSSettings {
     defaultSearchSource: number,
     autoPlayTrack: boolean,
     autoPlayRelease: boolean
+    apiToken: string | null
 }
 
 interface DSStorageSettings {

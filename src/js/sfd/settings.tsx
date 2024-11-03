@@ -29,7 +29,7 @@ const Setting: (props: SettingProps) => JSX.Element = ({ name, type, onChange, c
 const Settings: (props: SettingsProps) => JSX.Element = (props) => {
     const [settings, setSettings] = useState<DSSettings>(props.settings)
 
-    const settingChanged = (name: string, value: number | boolean | null) => {
+    const settingChanged = (name: string, value: number | string | boolean | null) => {
         if (value == null)
             return;
 
@@ -82,6 +82,32 @@ const Settings: (props: SettingsProps) => JSX.Element = (props) => {
             checked={settings.defaultSearchSource == constants.searchSources.deezer.value}
             onChange={settingChanged}
         />
+
+        <div className='settings-api-wrapper'>
+            <div className='settings-title'>API Key</div>
+        
+            <input
+                type='text'
+                className='api-token'
+                value={settings.apiToken ?? ''}
+                onChange={(event) => {
+                    settingChanged('apiToken', event.target.value)
+                }}
+            />
+            
+
+            <details>
+                <summary>Why you may need to enter your own API Key</summary>
+                There is a usage quote imposed by Google that limits each API Key to 100 searches per day.<br />
+                This extension comes with an API Key that is shared among all users.<br />
+                If you are experiencing issues with the extension, you may need to enter your own API Key.<br />
+                This is a free and simple process that requires a Google account and can be done by following the steps below:<br />
+                <a href="https://blog-proxy.rapidapi.com/how-to-get-youtube-api-key/" target="_blank">
+                    How to get your own YouTube API key
+                </a>
+            </details>
+
+        </div>
     </div>;
 }
 

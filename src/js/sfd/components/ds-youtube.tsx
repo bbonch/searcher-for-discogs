@@ -22,7 +22,7 @@ const DSYouTube: (props: DSYouTubeProps) => JSX.Element = ({ settings, dsIcon, d
 
     useEffect(() => {
         chrome.runtime.sendMessage({
-            url: constants.youTube.api.replace("{q}", dsTitle).replace("{key}", constants.youTube.key),
+            url: constants.youTube.api.replace("{q}", dsTitle).replace("{key}", settings.apiToken || constants.youTube.key),
             type: "GET",
             method: "getQueryResult",
             referrer: window.location.origin
