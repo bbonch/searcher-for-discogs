@@ -1,6 +1,6 @@
 {
   "name": "searcher-for-discogs",
-  "version": "8.1.7",
+  "version": "8.1.8",
   "description": "Allows to listen to tracks on Discogs by clicking on it",
   "scripts": {
     "build": "node build/build.js buildType=test",
