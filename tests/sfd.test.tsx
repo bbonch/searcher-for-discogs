@@ -44,9 +44,9 @@ describe('ds-popover component works', () => {
   beforeEach(() => {
     const container = document.createElement('div')
     container.innerHTML = `
-    <h1 class="title_1q3xW">
+    <h1>
       <span>
-        <a>ArtistName</a>
+        <a class="link_PKPcS">ArtistName</a>
       </span>
     </h1>
     <table>

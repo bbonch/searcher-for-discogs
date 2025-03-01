@@ -1,7 +1,7 @@
 const discogsOptionsMaster: DSOptions = {
     trackTitle: "td[class^='trackTitle'] span",
-    trackArtist: ".artist_1mUch",
-    profileTitle: ".title_1q3xW span a",
+    trackArtist: ".artist__Aq2S",
+    profileTitle: "a.link_PKPcS",
     getTrack: function (icon) {
         const prev = $(icon).parent().prev();
         const track = prev.is("span") ? prev : prev.find("span");
@@ -42,9 +42,9 @@ const discogsOptionsMaster: DSOptions = {
 }
 
 const discogsOptionsRelease: DSOptions = {
-    trackTitle: "span.trackTitle_CTKp4",
-    trackArtist: ".artist_3zAQD",
-    profileTitle: ".title_1q3xW a",
+    trackTitle: "span[class^='trackTitle']",
+    trackArtist: ".artist_VsG56",
+    profileTitle: "a.link_PKPcS",
     getTrack: function (dsIcon) {
         const prev = $(dsIcon).parent().prev();
         const track = prev.is("span") ? prev : prev.find("span");
@@ -55,7 +55,7 @@ const discogsOptionsRelease: DSOptions = {
         return $(track).html();
     },
     getArtistName: function (this: DSOptions, dsIcon) {
-        const trackArtist = $(dsIcon).parent().parent().parent().find(this.trackArtist as string);
+        const trackArtist = $(dsIcon).closest("tr").find(this.trackArtist as string);
         const trackArtistLink = trackArtist.find("a");
 
         let artistName = '';
