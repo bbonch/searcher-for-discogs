@@ -22,13 +22,11 @@ type DSIconProps = {
 
 type DSPopoverProps = {
     settings: DSSettings,
-    dsIcon: HTMLImageElement,
     dsTitle: string
 }
 
 type DSYouTubeProps = {
     settings: DSSettings,
-    dsIcon: HTMLImageElement,
     dsTitle: string
 }
 

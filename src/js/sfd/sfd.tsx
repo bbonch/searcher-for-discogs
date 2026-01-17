@@ -2,7 +2,7 @@ import options from './utils/options'
 import DSIcon from './components/ds-icon'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import '../../css/styles.scss'
+import '../../css/sfd.scss'
 import { getSettings } from './utils/chromeStorage'
 import { init } from '../sfd/utils/analytics'
 

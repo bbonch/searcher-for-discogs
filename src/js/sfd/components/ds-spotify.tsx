@@ -38,7 +38,7 @@ const DSSpotify: (props: DSSpotifyProps) => JSX.Element = ({ dsTitle }) => {
         });
     }, [dsTitle])
 
-    return <iframe src={src} height={constants.player.height} width={constants.player.width}></iframe>
+    return <iframe frameBorder={0} src={src} height={constants.player.height} width={constants.player.width}></iframe>
 }
 
 export default DSSpotify

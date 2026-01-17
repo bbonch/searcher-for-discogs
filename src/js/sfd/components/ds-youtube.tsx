@@ -1,23 +1,11 @@
 import React, { useEffect, useRef } from 'react'
-import usePopover from '../hooks/usePopover'
 
-const DSYouTube: (props: DSYouTubeProps) => JSX.Element = ({ settings, dsIcon, dsTitle }) => {
+const DSYouTube: (props: DSYouTubeProps) => JSX.Element = ({ settings, dsTitle }) => {
     const youTubeRef: React.RefObject<HTMLDivElement> = useRef(null)
-
-    const { setupPopover, getNextIcon } = usePopover()
 
     const onPlayerReady = (e) => {
         if (settings.autoPlayTrack)
             e.target.playVideo();
-    }
-
-    const onPlayerStateChange = (e) => {
-        if (e.data == 0) {
-            if (!settings.autoPlayRelease) return;
-
-            var nextIcon = getNextIcon(dsIcon)
-            setupPopover(nextIcon, settings);
-        }
     }
 
     useEffect(() => {
@@ -45,8 +33,7 @@ const DSYouTube: (props: DSYouTubeProps) => JSX.Element = ({ settings, dsIcon, d
                         width: constants.player.width,
                         videoId: videoId,
                         events: {
-                            'onReady': onPlayerReady,
-                            'onStateChange': onPlayerStateChange
+                            'onReady': onPlayerReady
                         }
                     });
                 }

@@ -67,8 +67,8 @@ const constants: DSConstants = {
         auth: "frnn1og3OlkyIu2M96IvygSwlZiLlwgpvwJXqJ4HewETYBD2Jf"
     },
     player: {
-        width: 420,
-        height: 300
+        width: 320,
+        height: 180
     }
 }
 
