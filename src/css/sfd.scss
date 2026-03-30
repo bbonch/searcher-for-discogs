@@ -1,12 +1,19 @@
-﻿.popover {
+.popover {
     max-width: 100%;
 }
 
 .discogs-searcher {
+    box-sizing: border-box;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     padding-bottom: 9px;
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
 
     button {
         outline: none !important;

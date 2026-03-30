@@ -1,6 +1,6 @@
 {
   "name": "searcher-for-discogs",
-  "version": "8.1.9",
+  "version": "8.1.10",
   "description": "Allows to listen to tracks on Discogs by clicking on it",
   "scripts": {
     "build": "node build/build.js buildType=test",
@@ -50,7 +50,7 @@
     "ts-jest": "^28.0.5",
     "ts-loader": "^9.3.1",
     "typescript": "^5.5.4",
-    "webpack": "^5.94.0",
+    "webpack": "5.104.1",
     "webpack-cli": "^5.1.4",
     "zip-folder": "^1.0.0"
   },
