@@ -84,6 +84,36 @@ const discogsOptionsRelease: DSOptions = {
     }
 }
 
+const lastfmOptions: DSOptions = {
+    trackTitle: ".chartlist-row:not(:has(.chartlist-play-button)) .chartlist-name a",
+    profileTitle: ".header-new-title",
+    getTrack: function (dsIcon) {
+        return $(dsIcon).parent().prev();
+    },
+    getTrackName: function (track) {
+        return $(track).text().trim();
+    },
+    getArtistName: function (dsIcon) {
+        const rowArtist = $(dsIcon).closest("tr").find(".chartlist-artist a, .chartlist-artist").first();
+        const headerCrumb = $(".header-new-crumb").first();
+
+        let artistName = '';
+        if (rowArtist.length > 0 && rowArtist.text().trim().length > 0) {
+            artistName = rowArtist.text().trim();
+        } else if (headerCrumb.length > 0) {
+            artistName = headerCrumb.text().trim();
+        } else {
+            artistName = $(this.profileTitle).text().trim();
+        }
+        artistName = artistName.replace('&amp;', '&').replace(/\(\d*\)/, '');
+
+        return artistName;
+    },
+    getStyle: function () {
+        return null;
+    }
+};
+
 const rymOptions: DSOptions = {
     trackTitle: '.tracklist_title > :first-child',
     profileTitle: ".album_info .artist",
@@ -119,6 +149,8 @@ if (window.location.href.match(".*discogs\.com/master.*")) {
     exportOptions = discogsOptionsRelease;
 } else if (window.location.host.match(".*rateyourmusic.*")) {
     exportOptions = rymOptions;
+} else if (window.location.host.match(".*last\.fm.*")) {
+    exportOptions = lastfmOptions;
 }
 
 export default exportOptions

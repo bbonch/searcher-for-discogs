@@ -1,5 +1,5 @@
 import React, { CSSProperties, useCallback, useEffect, useRef, useState } from 'react'
-import { arrow, autoUpdate, flip, offset, shift, useClick, useDismiss, useFloating, useInteractions } from '@floating-ui/react'
+import { arrow, autoUpdate, flip, FloatingPortal, offset, shift, useClick, useDismiss, useFloating, useInteractions } from '@floating-ui/react'
 import DSPopover from './ds-popover';
 import usePopover from '../hooks/usePopover';
 
@@ -84,14 +84,16 @@ const DSIcon: (props: DSIconProps) => JSX.Element = ({ settings }) => {
         <img ref={refs.setReference} {...getReferenceProps({
             onClick: onClick
         })} className={constants.classes.dsIcon} src={logoUrl} />
-        {isOpen && <div ref={refs.setFloating} style={newFloatingStyles} {...getFloatingProps()}>
-            <DSPopover settings={settings} dsTitle={title} />
-            <div
-                className='arrow'
-                ref={arrowRef}
-                style={getArrowStyle()}
-            />
-        </div >}
+        {isOpen && <FloatingPortal>
+            <div ref={refs.setFloating} style={newFloatingStyles} {...getFloatingProps()}>
+                <DSPopover settings={settings} dsTitle={title} />
+                <div
+                    className='arrow'
+                    ref={arrowRef}
+                    style={getArrowStyle()}
+                />
+            </div>
+        </FloatingPortal>}
     </>
 }
 
