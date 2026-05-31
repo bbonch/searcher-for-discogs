@@ -16,12 +16,17 @@ const DSIcon: (props: DSIconProps) => JSX.Element = ({ settings }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [title, setTitle] = useState('');
 
+    const onOpenChange = useCallback((open: boolean, e: Event) => {
+        setIsOpen(open);
+        updateTrackStyle(e.currentTarget as HTMLImageElement)
+    }, [])
+
     const arrowRef = useRef<HTMLDivElement>(null);
 
     const { refs, floatingStyles, context, middlewareData, placement } = useFloating({
         placement: "right",
         open: isOpen,
-        onOpenChange: setIsOpen,
+        onOpenChange: onOpenChange,
         middleware: [offset(10), flip({
             fallbackAxisSideDirection: 'end'
         }), shift(), arrow({
@@ -41,10 +46,6 @@ const DSIcon: (props: DSIconProps) => JSX.Element = ({ settings }) => {
         const trackInfo = getTrackInfo(refs.reference.current as HTMLImageElement)
         setTitle(trackInfo.title)
     }, [refs])
-
-    const onClick = useCallback<React.MouseEventHandler<HTMLImageElement>>((e) => {
-        updateTrackStyle(e.currentTarget)
-    }, [])
 
     const getArrowStyle: () => CSSProperties = useCallback(() => {
         const side = placement.split("-")[0] as keyof typeof staticSides;
@@ -81,9 +82,7 @@ const DSIcon: (props: DSIconProps) => JSX.Element = ({ settings }) => {
     const newFloatingStyles: CSSProperties = { ...floatingStyles, zIndex: 100 }
 
     return <>
-        <img ref={refs.setReference} {...getReferenceProps({
-            onClick: onClick
-        })} className={constants.classes.dsIcon} src={logoUrl} />
+        <img ref={refs.setReference} {...getReferenceProps()} className={constants.classes.dsIcon} src={logoUrl} />
         {isOpen && <FloatingPortal>
             <div ref={refs.setFloating} style={newFloatingStyles} {...getFloatingProps()}>
                 <DSPopover settings={settings} dsTitle={title} />
