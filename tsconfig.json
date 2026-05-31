@@ -1,15 +1,21 @@
 {
     "compilerOptions": {
+        "rootDir": "./src",
         "outDir": "dist",
         "sourceMap": true,
         "strictNullChecks": true,
-        "module": "esnext",
+        "module": "Node16",
         "jsx": "react",
-        "target": "es5",
+        "target": "es6",
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
-        "moduleResolution": "node"
+        "moduleResolution": "node16",
+        "types": [
+            "jquery",
+            "node",
+            "gtag.js"
+        ]
     },
     "include": [
         "./src/"

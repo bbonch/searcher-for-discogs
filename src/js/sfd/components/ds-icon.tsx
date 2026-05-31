@@ -9,7 +9,7 @@ const DSIcon: (props: DSIconProps) => JSX.Element = ({ settings }) => {
         right: "left",
         bottom: "top",
         left: "right",
-    };
+    } as const;
 
     const logoUrl = chrome.runtime.getURL(constants.urls.logo) as string;
 
@@ -47,7 +47,7 @@ const DSIcon: (props: DSIconProps) => JSX.Element = ({ settings }) => {
     }, [])
 
     const getArrowStyle: () => CSSProperties = useCallback(() => {
-        const side = placement.split("-")[0];
+        const side = placement.split("-")[0] as keyof typeof staticSides;
         const staticSide = staticSides[side];
         const arrowLen = arrowRef.current ? arrowRef.current.offsetWidth : 0;
         const arrowStyle: CSSProperties = {

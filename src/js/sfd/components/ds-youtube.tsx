@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react'
 const DSYouTube: (props: DSYouTubeProps) => JSX.Element = ({ settings, dsTitle }) => {
     const youTubeRef: React.RefObject<HTMLDivElement> = useRef(null)
 
-    const onPlayerReady = (e) => {
+    const onPlayerReady = (e: any) => {
         if (settings.autoPlayTrack)
             e.target.playVideo();
     }

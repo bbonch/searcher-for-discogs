@@ -21,7 +21,7 @@ const DSSpotify: (props: DSSpotifyProps) => JSX.Element = ({ dsTitle }) => {
                         type: "GET",
                         auth: "Bearer " + result.access_token,
                         method: "getQueryResult"
-                    }, function (r) {
+                    }, function (r: any) {
                         if (r.success) {
                             if (r.result != undefined) {
                                 try {
