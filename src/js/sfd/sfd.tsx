@@ -12,14 +12,19 @@ const ATTACHED_MARKER = 'data-ds-attached'
 
 const attachIcons = (settings: DSSettings) => {
     $(options.trackTitle).each((_, element) => {
-        if (element.hasAttribute(ATTACHED_MARKER)) return;
-        element.setAttribute(ATTACHED_MARKER, '');
+        const $el = $(element);
+        const parent = $el.parent();
+        const $attachedTo = parent.is("a") ? parent : $el;
+
+        // Choose a meaningful container to mark so we only attach one icon per track.
+        const $container = $attachedTo.closest("td[class^='trackTitle'], .chartlist-row, .tracklist_title, tr, li");
+        const markerEl = ($container.length ? $container.get(0) : $attachedTo.get(0)) as Element;
+
+        if (markerEl && markerEl.hasAttribute && markerEl.hasAttribute(ATTACHED_MARKER)) return;
+        if (markerEl) markerEl.setAttribute(ATTACHED_MARKER, '');
 
         const iconDS = document.createElement("span");
-
-        const parent = $(element).parent();
-        const attachedTo = parent.is("a") ? parent : $(element);
-        attachedTo.after(iconDS);
+        $attachedTo.after(iconDS);
 
         const root = createRoot(iconDS)
         root.render(<DSIcon settings={settings} />)
